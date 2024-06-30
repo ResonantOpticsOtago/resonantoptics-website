@@ -6,20 +6,23 @@
 # Appearance
 
 appearance:
+  color: green
+  mode: dark
   theme_day: minimal
-  theme_night:
+  theme_night: minimal
   font: native
   font_size: L
+  
 
 # SEO
 
 marketing:
   seo:
     site_type: Organization
-    local_business_type: ''
-    org_name: ''
-    description: 'A highly-customizable Hugo research group theme powered by Wowchemy website builder.'
-    twitter: 'GetResearchDev'
+    local_business_type: 'ResearchOrganization'
+    org_name: 'University of Otago'
+    description: 'Resonant Optics research group in the Physics Department of the University of Otago.'
+    twitter: 
   analytics:
     google_analytics: ''
     baidu_tongji: ''
@@ -39,7 +42,7 @@ header:
     show_language: false
     show_day_night: true
     show_search: true
-    highlight_active_link: false
+    highlight_active_link: true
 
 # Site footer
 
@@ -58,6 +61,7 @@ locale:
   date_format: 'Jan 2, 2006'
   time_format: '3:04 PM'
   address_format: en-us
+  Timezone: NZ
 
 # Site features
 
@@ -68,7 +72,7 @@ features:
       - r
       - latex
   math:
-    enable: false
+    enable: true
   privacy_pack:
     enable: false
   repository:
@@ -115,4 +119,4 @@ extensions:
 
 publications:
   date_format: January 2006
-  citation_style: apa
+  citation_style: mla 
