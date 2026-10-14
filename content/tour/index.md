@@ -14,7 +14,7 @@ sections:
         align: center
         background:
           image:
-            filename: Group2023.jpg
+            filename: Group2025.jpg
             filters:
               brightness: 0.7
           position: right
