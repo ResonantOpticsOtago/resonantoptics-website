@@ -1,0 +1,14 @@
+# Copy this file to publish.conf (which is git-ignored) and fill in the values.
+# publish.conf is read by scripts/publish.sh.
+
+# Where rsync should put the built site: "user@host:/absolute/path/to/docroot/"
+# The trailing slash matters: the CONTENTS of public/ are copied into that folder.
+RSYNC_TARGET="your-login@webserver.otago.ac.nz:/path/to/resonantoptics/docroot/"
+
+# The public address of the site (used for absolute links, sitemap, RSS).
+BASE_URL="https://resonantoptics.physics.otago.ac.nz/"
+
+# "yes": files on the server that are not part of the build are deleted
+# (keeps the server identical to public/; correct when the folder holds only
+# this site).  "no": only add/update files, never delete.
+DELETE_REMOTE="yes"

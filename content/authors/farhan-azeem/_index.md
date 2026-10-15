@@ -45,7 +45,7 @@ social:
 #    link: 'mailto:harald.schwefel@otago.ac.nz'
   - icon: google-scholar
     icon_pack: ai
-    link: ttps://scholar.google.com/citations?hl=en&user=Kh6v5zwAAAAJ
+    link: https://scholar.google.com/citations?hl=en&user=Kh6v5zwAAAAJ
 #  - icon: github
 #    icon_pack: fab
 #    link: https://github.com/gcushen

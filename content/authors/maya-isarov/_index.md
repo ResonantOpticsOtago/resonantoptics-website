@@ -8,7 +8,7 @@ last_name: Isarov
 
 # Username (this should match the folder name)
 authors:
-  - maja-isarov
+  - maya-isarov
 
 # Is this the primary user of the site?
 superuser: false

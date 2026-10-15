@@ -1,0 +1,105 @@
+# Build check for every change.
+#
+# Runs on pull requests into `draft` or `main` and on pushes to those branches.
+# It does NOT publish anything: publishing is done by hand with
+# scripts/publish.sh (see docs/MAINTAINERS.md).  It
+#   1. checks that the Hugo version pinned in .hugo-version matches netlify.toml,
+#   2. installs exactly that Hugo (extended) and verifies the download checksum,
+#   3. validates the people profiles (scripts/check_people.py),
+#   4. builds the site; the job fails on any Hugo error,
+#   5. lists Hugo warnings in the job summary,
+#   6. uploads the built `public/` folder as an artifact (kept 14 days).
+
+name: Build check
+
+on:
+  pull_request:
+    branches: [main, draft]
+  push:
+    branches: [main, draft]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  HUGO_CACHEDIR: /tmp/hugo_cache_runner/
+  SITE_URL: https://resonantoptics.physics.otago.ac.nz/
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # full history so Hugo can derive last-modified dates from git
+
+      - name: Read the pinned Hugo version
+        id: hugo
+        run: echo "version=$(tr -d '[:space:]' < .hugo-version)" >> "$GITHUB_OUTPUT"
+
+      - name: Check netlify.toml pins the same Hugo version
+        run: |
+          nv=$(grep -E '^\s*HUGO_VERSION' netlify.toml | sed -E 's/.*"([^"]+)".*/\1/')
+          if [ "$nv" != "${{ steps.hugo.outputs.version }}" ]; then
+            echo "::error file=netlify.toml::HUGO_VERSION is $nv but .hugo-version says ${{ steps.hugo.outputs.version }}"
+            exit 1
+          fi
+
+      - name: Install Hugo ${{ steps.hugo.outputs.version }} (extended) and verify checksum
+        run: |
+          v="${{ steps.hugo.outputs.version }}"
+          base="https://github.com/gohugoio/hugo/releases/download/v${v}"
+          tgz="hugo_extended_${v}_linux-amd64.tar.gz"
+          curl -sSL -o "/tmp/$tgz" "$base/$tgz"
+          curl -sSL -o /tmp/checksums.txt "$base/hugo_${v}_checksums.txt"
+          (cd /tmp && grep " $tgz\$" checksums.txt | sha256sum -c -)
+          sudo tar -xzf "/tmp/$tgz" -C /usr/local/bin hugo
+          hugo version
+
+      - name: Cache Hugo modules
+        uses: actions/cache@v4
+        with:
+          path: /tmp/hugo_cache_runner/
+          key: ${{ runner.os }}-hugomod-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-hugomod-
+
+      - name: Set up Python (for the profile checker)
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pyyaml==6.0.2
+
+      - name: Validate people profiles
+        run: python scripts/check_people.py
+
+      - name: Build site
+        env:
+          HUGO_ENVIRONMENT: production
+        run: |
+          hugo --gc --minify --baseURL "$SITE_URL" 2>&1 | tee build.log
+          test "${PIPESTATUS[0]}" -eq 0
+
+      - name: Summarise Hugo warnings
+        if: always()
+        run: |
+          {
+            echo "### Hugo warnings (deprecations are expected on this theme)"
+            echo '```'
+            grep -E '^WARN' build.log | sed -E 's/ (at|in|file) .*//' | sort | uniq -c | sort -rn || echo "none"
+            echo '```'
+            echo "Pages built: $(find public -name index.html | wc -l)"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload built site
+        uses: actions/upload-artifact@v4
+        with:
+          name: public-run${{ github.run_id }}
+          path: public/
+          retention-days: 14

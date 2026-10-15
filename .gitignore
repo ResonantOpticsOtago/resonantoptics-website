@@ -5,3 +5,16 @@
 /resources/
 public/
 assets/jsconfig.json
+
+# Build lock (Hugo recreates it every run; never commit it)
+.hugo_build.lock
+
+# Local publish settings (contains the rsync target for the university server)
+publish.conf
+
+# Node (needed only once the site moves to the Tailwind-based theme)
+node_modules/
+
+# OS noise
+.DS_Store
+Thumbs.db

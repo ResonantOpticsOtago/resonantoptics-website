@@ -62,3 +62,15 @@ security:
   _merge: deep
 sitemap:
   _merge: deep
+
+############################
+## EDIT LINKS
+## Show an "Edit this page" link on news posts; it opens the post's file in
+## GitHub's web editor on the branch set in params.yaml (features.repository).
+## Delete this block to remove the links.
+############################
+cascade:
+  - target:
+      path: /post/**
+      kind: page
+    editable: true

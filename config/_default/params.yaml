@@ -76,9 +76,9 @@ features:
   privacy_pack:
     enable: false
   repository:
-    url: 'https://github.com/<username>/<repository>'
+    url: 'https://github.com/ResonantOpticsOtago/resonantoptics-website'
     content_dir: content
-    branch: main
+    branch: draft   # "Edit this page" links open the file on the draft branch
   avatar:
     gravatar: false
     shape: circle

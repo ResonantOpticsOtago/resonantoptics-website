@@ -46,7 +46,7 @@ sections:
       order: desc
       page_type: post
     design:
-      view: 2
+      view: compact
       columns: '2'
   
   - block: collection
@@ -65,7 +65,7 @@ sections:
       order: desc
       page_type: projects
     design:
-      view: 5
+      view: showcase
       columns: '2'
       flip_alt_rows: true
       spacing:
@@ -111,7 +111,7 @@ sections:
         featured: true
         publication_type: 'featured'
     design:
-      view: 2
+      view: compact
       columns: '2'
 
   - block: collection
