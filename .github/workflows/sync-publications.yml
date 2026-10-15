@@ -1,0 +1,97 @@
+# Weekly: regenerate content/publication/ from the group's Zotero library and
+# open (or update) a pull request against `draft`.  Never touches `main`.
+#
+# - Needs the repository secret ZOTERO_API_KEY only if the group library is
+#   private.  With a public library no secret is required.
+# - The site is built with the new publications before the PR is opened; if
+#   that build fails, no PR is created and this run shows red.
+# - PRs opened with the default GITHUB_TOKEN do not trigger the "Build check"
+#   workflow (a GitHub rule).  That is why the build happens here.  If you want
+#   the check to appear on the PR as well, store a fine-grained personal access
+#   token (repository: contents + pull requests, read/write) as the secret
+#   PUBLICATIONS_PR_TOKEN; it is used automatically when present.
+# - Run it by hand any time: Actions tab -> "Sync publications from Zotero" -> Run workflow.
+
+name: Sync publications from Zotero
+
+on:
+  schedule:
+    - cron: "0 20 * * 0" # Sundays 20:00 UTC = Monday morning in New Zealand
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: sync-publications
+  cancel-in-progress: false
+
+env:
+  HUGO_CACHEDIR: /tmp/hugo_cache_runner/
+  SITE_URL: https://resonantoptics.physics.otago.ac.nz/
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout draft
+        uses: actions/checkout@v4
+        with:
+          ref: draft
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install academic==0.11.2 pyyaml==6.0.2
+
+      - name: Fetch the library and regenerate publication pages
+        env:
+          ZOTERO_API_KEY: ${{ secrets.ZOTERO_API_KEY }}
+        run: python scripts/sync_publications.py --summary /tmp/sync-summary.md
+
+      - name: Detect changes
+        id: changes
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+          cat /tmp/sync-summary.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Install pinned Hugo
+        if: steps.changes.outputs.changed == 'true'
+        uses: ./.github/actions/setup-hugo
+
+      - name: Cache Hugo modules
+        if: steps.changes.outputs.changed == 'true'
+        uses: actions/cache@v4
+        with:
+          path: /tmp/hugo_cache_runner/
+          key: ${{ runner.os }}-hugomod-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-hugomod-
+
+      - name: Build the site with the new publications
+        if: steps.changes.outputs.changed == 'true'
+        env:
+          HUGO_ENVIRONMENT: production
+        run: hugo --gc --minify --baseURL "$SITE_URL"
+
+      - name: Open or update the pull request
+        if: steps.changes.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.PUBLICATIONS_PR_TOKEN || secrets.GITHUB_TOKEN }}
+          base: draft
+          branch: auto/publications
+          delete-branch: true
+          commit-message: "content: sync publications from Zotero"
+          title: "Publications: sync from Zotero"
+          body-path: /tmp/sync-summary.md
+          labels: automated-pr, publications
+          add-paths: |
+            publications.bib
+            content/publication/

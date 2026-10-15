@@ -16,8 +16,9 @@ files in your browser; you do not need git or Hugo installed.
    so you cannot break the public site.
 
 Files you will edit: `content/post/…` (news) and `content/authors/…`
-(profiles). Please leave everything else alone, in particular `config/`,
-`go.mod`, `go.sum`, `netlify.toml`, `.github/` and `scripts/`.
+(profiles). Publications are not edited here at all (see below). Please leave
+everything else alone, in particular `config/`, `go.mod`, `go.sum`,
+`netlify.toml`, `publications.bib`, `.github/` and `scripts/`.
 
 ## Adding a news item
 
@@ -118,6 +119,26 @@ user_groups:
 
 A paragraph or two about yourself (optional).
 ```
+
+## Publications
+
+The publication list is generated from the group's Zotero library
+(<https://www.zotero.org/groups/6718035/>). To add a paper, add it to the
+Zotero group with complete metadata (authors as on the paper, journal, year,
+DOI, abstract); it appears on the site after the next weekly sync, as a pull
+request that Harald merges. Corrections to authors, title or journal are
+also made in Zotero, never in the repository — the next sync would undo them.
+
+Three things are done in the repository, in the paper's folder
+`content/publication/<key>/` (the key looks like `lambert-coherent-2025`):
+
+- put the paper in "Featured Publications" on the home page: add the line
+  `featured: true` to the front matter of `index.md`;
+- give it a thumbnail: upload `featured.jpg` (or `.png`) into the folder;
+- say something about it: write Markdown below the closing `---` of `index.md`.
+
+These survive future syncs. Your name links to your profile when it is
+written exactly as in your profile's `title`.
 
 ## Checking your work
 

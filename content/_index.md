@@ -108,8 +108,7 @@ sections:
       filters:
         folders:
           - publication
-        featured: true
-        publication_type: 'featured'
+        featured_only: true   # publications with `featured: true` in their front matter
     design:
       view: compact
       columns: '2'

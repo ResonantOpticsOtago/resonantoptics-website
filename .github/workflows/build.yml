@@ -4,7 +4,7 @@
 # It does NOT publish anything: publishing is done by hand with
 # scripts/publish.sh (see docs/MAINTAINERS.md).  It
 #   1. checks that the Hugo version pinned in .hugo-version matches netlify.toml,
-#   2. installs exactly that Hugo (extended) and verifies the download checksum,
+#   2. installs exactly that Hugo (extended) via .github/actions/setup-hugo (checksum-verified),
 #   3. validates the people profiles (scripts/check_people.py),
 #   4. builds the site; the job fails on any Hugo error,
 #   5. lists Hugo warnings in the job summary,
@@ -51,16 +51,8 @@ jobs:
             exit 1
           fi
 
-      - name: Install Hugo ${{ steps.hugo.outputs.version }} (extended) and verify checksum
-        run: |
-          v="${{ steps.hugo.outputs.version }}"
-          base="https://github.com/gohugoio/hugo/releases/download/v${v}"
-          tgz="hugo_extended_${v}_linux-amd64.tar.gz"
-          curl -sSL -o "/tmp/$tgz" "$base/$tgz"
-          curl -sSL -o /tmp/checksums.txt "$base/hugo_${v}_checksums.txt"
-          (cd /tmp && grep " $tgz\$" checksums.txt | sha256sum -c -)
-          sudo tar -xzf "/tmp/$tgz" -C /usr/local/bin hugo
-          hugo version
+      - name: Install Hugo ${{ steps.hugo.outputs.version }} (extended), checksum-verified
+        uses: ./.github/actions/setup-hugo
 
       - name: Cache Hugo modules
         uses: actions/cache@v4

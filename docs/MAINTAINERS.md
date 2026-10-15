@@ -24,10 +24,13 @@ content/publication/ one folder per paper, generated from BibTeX   <- publicatio
 content/projects/  research project pages
 content/people/, content/contact/   landing pages built from blocks
 assets/media/      images referenced from the home page / blocks
-scripts/           check_people.py (profile validation), publish.sh (publish)
+scripts/           check_people.py (profile validation), publish.sh (publish),
+                   sync_publications.py (Zotero -> content/publication/)
+publications.bib   the group's Zotero library as BibTeX, written by the sync (do not edit by hand)
 .hugo-version      the Hugo version used everywhere (CI, Netlify, local)
 netlify.toml       Netlify build settings (HUGO_VERSION must equal .hugo-version)
-.github/workflows/ build.yml (build check), import-publications.yml (BibTeX import)
+.github/workflows/ build.yml (build check), sync-publications.yml (weekly Zotero sync)
+.github/actions/   setup-hugo: installs the pinned Hugo, checksum-verified (used by both workflows)
 ```
 
 Abbreviations: CI = continuous integration (GitHub Actions); PR = pull
@@ -39,8 +42,8 @@ request; YAML = the `key: value` format used in every front matter block.
 |---|---|---|
 | Hugo (extended) | `.hugo-version`, `netlify.toml` (`HUGO_VERSION`) | 0.164.0 |
 | Theme modules | `go.mod` / `go.sum` | blox-bootstrap/v5 @ 2024-10-12 commit (`v5.9.8-0.20241012174104-661cadc17327`) |
-| `academic` (BibTeX converter) | `.github/workflows/import-publications.yml` | 0.11.2 |
-| PyYAML (profile checker) | `.github/workflows/build.yml` | 6.0.2 |
+| `academic` (BibTeX converter) | `.github/workflows/sync-publications.yml` | 0.11.2 |
+| PyYAML (checker and sync scripts) | both workflows | 6.0.2 |
 
 **Upgrading Hugo.** Hugo makes breaking changes in minor releases. Before
 changing the pin: read the release notes for every version in between
@@ -98,7 +101,7 @@ push to those branches. It
 
 1. verifies `.hugo-version` and `netlify.toml` agree,
 2. downloads exactly that Hugo release and verifies its SHA-256 checksum
-   against Hugo's published checksums file,
+   against Hugo's published checksums file (`.github/actions/setup-hugo`),
 3. runs `scripts/check_people.py` (errors fail the build),
 4. builds the site; any Hugo *error* fails the job,
 5. writes a de-duplicated list of Hugo *warnings* into the job summary
@@ -108,10 +111,15 @@ push to those branches. It
 
 The workflow needs no secrets. It never deploys.
 
-`.github/workflows/import-publications.yml` is the theme's stock BibTeX
-importer: if a `publications.bib` file is committed to `draft` it converts new
-entries into `content/publication/<key>/index.md` and opens a PR against
-`draft`. It is the manual fallback until the Zotero job replaces it.
+`.github/workflows/sync-publications.yml` runs every Sunday 20:00 UTC (and
+on demand from the Actions tab): it checks out `draft`, runs
+`scripts/sync_publications.py` (section 8), builds the site with the result,
+and if anything changed opens or updates the PR `auto/publications` against
+`draft`. It needs the secret `ZOTERO_API_KEY` only while the Zotero group
+library is private. Because PRs opened with the built-in token do not trigger
+other workflows, the build happens inside this job; optionally store a
+fine-grained personal access token as `PUBLICATIONS_PR_TOKEN` and the normal
+"Build check" will run on the PR too.
 
 ## 5. Publishing (manual)
 
@@ -171,20 +179,51 @@ keep the folder; their publications and posts keep linking to the profile.
 
 ## 8. Publications
 
-Generated with the [`academic`](https://github.com/GetRD/academic-file-converter)
-converter from BibTeX: one folder per entry, named after the BibTeX key.
-`academic import publications.bib content/publication/ --compact` creates
-folders for new keys and leaves existing folders alone (no `--overwrite`), so
-hand-made additions in a folder survive: a `featured.jpg` image, and
-`featured` in the `publication_types:` list, which is what the home page's
-"Featured Publications" block filters on. Changing BibTeX data of an existing
-entry therefore requires either deleting the folder and re-importing, or
-editing `index.md` by hand.
+**Zotero group 6718035 is the source of truth for bibliographic data.** Add,
+correct or remove papers there; the site follows within a week (or run the
+workflow by hand). Nobody edits bibliographic fields in the repository.
 
-Planned: a scheduled GitHub Actions job exports the group's Zotero library
-(group 6718035) via the Zotero API, runs the converter, and opens a PR
-against `draft` when anything changed. See the project notes until it is in
-place.
+What the sync does (`scripts/sync_publications.py`):
+
+1. downloads the whole group library as BibTeX through the Zotero Web API
+   (`/groups/6718035/items/top?format=bibtex`, 100 items per request) and
+   stores it, sorted by citation key, as `publications.bib`;
+2. runs the `academic` converter into a temporary folder;
+3. writes `content/publication/<key>/index.md` for every entry with the fresh
+   bibliographic fields, **keeping from the existing file** the curated
+   fields (`featured`, `image`, `projects`, `summary`, `url_*`, `slides`,
+   `author_notes`, `publication_short`, `draft`) and any text below the front
+   matter, and refreshes `cite.bib`;
+4. deletes folders whose key is no longer in the library, but only if they
+   contain nothing but `index.md` and `cite.bib`; a folder with an image or
+   PDF is kept and listed in the PR as "kept although not in Zotero" (usually
+   the citation key changed: move the image to the new folder, delete the old).
+
+Safety: if the library returns fewer than 80 % of the folders the site has,
+the script refuses (exit 2) instead of deleting; pass `--allow-shrink` if the
+shrink is real. The output is deterministic, so a sync with no changes in
+Zotero produces no diff.
+
+Citation keys come from Zotero's BibTeX translator (`author_firstword_year`),
+so an item keeps its folder as long as first author, first title word and
+year do not change. Better BibTeX is not involved.
+
+Curation that lives in the repository, not in Zotero:
+- feature a paper on the home page: `featured: true` in its `index.md`;
+- a thumbnail: `featured.jpg`/`.png` in the paper's folder;
+- a few sentences about the paper: Markdown below the front matter.
+
+Manual use: `python3 scripts/sync_publications.py --dry-run` reports;
+without `--dry-run` it writes. `--bib file.bib` uses a BibTeX file exported
+from Zotero desktop instead of the API (works offline / without a key).
+Needs `pip install academic==0.11.2 pyyaml`.
+
+Zotero access: either make the group library readable (Group Settings →
+Library Settings → Library Reading: "Anyone on the internet"; the sync then
+needs no secret), or create a read-only API key (zotero.org → Settings →
+Security → Create new private key → group 6718035: Read Only) and store it as
+the repository secret `ZOTERO_API_KEY` (Settings → Secrets and variables →
+Actions). Without either, the workflow fails with a 403 message.
 
 ## 9. Access you need to take this over
 
@@ -194,8 +233,8 @@ place.
   (ask physics IT; the path is in the current maintainer's `publish.conf`).
 - Netlify: a team member on the Netlify site (or create a new one; nothing
   on Netlify is irreplaceable).
-- Zotero: member of group 6718035 (once the Zotero job exists, also the API
-  key stored as a repository secret `ZOTERO_API_KEY`, or none if the group
-  library is public).
+- Zotero: member (ideally admin) of group 6718035. If the library is private,
+  the repository secret `ZOTERO_API_KEY` must hold a key with read access;
+  keys belong to a person's account, so replace it when that person leaves.
 - Domain/DNS and the web server itself are run by the university; you never
   need to touch them.

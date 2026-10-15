@@ -1,6 +1,5 @@
 ---
-title: Experimental characterization of an uniaxial angle cut whispering gallery mode
-  resonator
+title: Experimental characterization of an uniaxial angle cut whispering gallery mode resonator
 authors:
 - Florian Sedlmeir
 - Martin Hauer
@@ -8,21 +7,11 @@ authors:
 - Gerd Leuchs
 - Harald G. L. Schwefel
 date: '2013-10-01'
-publishDate: '2024-06-25T13:29:39.049437Z'
 publication_types:
 - article-journal
 publication: '*Optics Express*'
 doi: 10.1364/OE.21.023942
-abstract: 'The usual configuration of uniaxial whispering gallery mode resonators
-  is a disk shaped geometry where the optic axis points along the symmetry axis, a
-  so called z-cut resonator. Recently x-cut resonators, where the optic axis lies
-  in the equatorial plane, became of interest as they enable extremely broadband second
-  harmonic generation. In this paper we report on the properties of a more generalized
-  system, the so called angle-cut resonator, where the optic axis exhibits an arbitrary
-  angle against the symmetry axis. We show experimentally that the modal structure
-  and quality factors are similar to common resonators but that the polarization properties
-  differ quite significantly: due to the asymmetry the polarization depends on the
-  equatorial position and is, in general, elliptical.'
+abstract: 'The usual configuration of uniaxial whispering gallery mode resonators is a disk shaped geometry where the optic axis points along the symmetry axis, a so called z-cut resonator. Recently x-cut resonators, where the optic axis lies in the equatorial plane, became of interest as they enable extremely broadband second harmonic generation. In this paper we report on the properties of a more generalized system, the so called angle-cut resonator, where the optic axis exhibits an arbitrary angle against the symmetry axis. We show experimentally that the modal structure and quality factors are similar to common resonators but that the polarization properties differ quite significantly: due to the asymmetry the polarization depends on the equatorial position and is, in general, elliptical.'
 tags:
 - Birefringence
 - Crystal optics
