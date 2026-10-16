@@ -1,13 +1,18 @@
+# Netlify builds the `draft` branch as a preview. It never publishes to the
+# university server. Build settings:
+#   - Hugo version: must equal .hugo-version (the CI build check verifies this)
+#   - HUGO_ENVIRONMENT=preview loads config/preview/ on top of config/_default/
+#     (edit links on posts, no analytics); the published site uses "production".
+#   - Do not enable HUGO_ENABLEGITINFO here: Netlify clones shallowly, so every
+#     page would show "Last updated on <date of the latest commit>".
+
 [build]
   command = "hugo --gc --minify -b $URL"
   publish = "public"
 
 [build.environment]
   HUGO_VERSION = "0.164.0"   # keep identical to .hugo-version (CI checks this)
-  HUGO_ENABLEGITINFO = "true"
-
-[context.production.environment]
-  HUGO_ENV = "production"
+  HUGO_ENVIRONMENT = "preview"
 
 [context.deploy-preview]
   command = "hugo --gc --minify --buildFuture -b $DEPLOY_PRIME_URL"

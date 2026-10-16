@@ -13,7 +13,8 @@ edit their profile should read [EDITING.md](EDITING.md) instead.
 - Source of truth: this GitHub repository, branch `main`.
 - Live site: <https://resonantoptics.physics.otago.ac.nz>, served by the
   University of Otago physics web server. Publishing is **manual** (section 5).
-- Preview site: Netlify builds the `draft` branch (section 6).
+- Preview site: <https://draft-resonantoptics.netlify.app/>, Netlify's build of
+  the `draft` branch (sections 2a and 6).
 
 ```
 config/_default/   Hugo + theme configuration (hugo.yaml, params.yaml, menus.yaml, module.yaml)
@@ -67,6 +68,19 @@ then `hugo mod tidy`, build, review, PR.
 repository alongside the theme (`assets/scss/custom.scss`, `layouts/partials/...`
 only if unavoidable, and if so document it here). An overridden theme file
 silently stops receiving upstream fixes.
+
+## 2a. Hugo environments: production vs preview
+
+Hugo loads `config/_default/` always and, on top of it, the folder named
+after the environment: `config/production/` (does not exist) or
+`config/preview/`. `scripts/publish.sh` and the CI build check run with
+`HUGO_ENVIRONMENT=production`; Netlify runs with `HUGO_ENVIRONMENT=preview`
+(set in `netlify.toml`). Anything that must appear only on the preview — today
+the "Edit this page" links on news posts — goes into `config/preview/`.
+Outside production the theme also skips analytics and asset fingerprinting,
+which is fine for a preview. Netlify must not enable `HUGO_ENABLEGITINFO`: it
+clones shallowly, so Hugo would date every page with the latest commit and
+print "Last updated on …" everywhere.
 
 ## 3. Branches and review
 
@@ -217,6 +231,10 @@ Manual use: `python3 scripts/sync_publications.py --dry-run` reports;
 without `--dry-run` it writes. `--bib file.bib` uses a BibTeX file exported
 from Zotero desktop instead of the API (works offline / without a key).
 Needs `pip install academic==0.11.2 pyyaml`.
+
+The group id is 6718035 in the script; to change it without editing code,
+set the repository variable `ZOTERO_GROUP_ID` (Settings → Secrets and
+variables → Actions → Variables).
 
 Zotero access: either make the group library readable (Group Settings →
 Library Settings → Library Reading: "Anyone on the internet"; the sync then

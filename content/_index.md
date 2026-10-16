@@ -22,7 +22,7 @@ sections:
       text: |
         <br>
         
-        {{< figure library="1" src="Cavity_Illumination.jpg" title="" >}} Welcome to the **Resonant Optics** research group within the [Physics Department](https://www.otago.ac.nz/physics/) of the [University of Otago](https://www.otago.ac.nz/) and as part of the [Dodd-Walls Centre for Photonic and Quantum Technologies](https://www.doddwalls.ac.nz). Our team is lead by [Associate Professor Harald Schwefel](./author/harald-g.-l.-schwefel/). Our research is centered around resonantly enhanced nonlinear interactions. Currently we investigate optical frequency combs, coherent microwave to optics conversion, and other fundamental aspects. 
+        {{< figure library="1" src="Cavity_Illumination.jpg" title="" >}} Welcome to the **Resonant Optics** research group within the [Physics Department](https://www.otago.ac.nz/physics/) of the [University of Otago](https://www.otago.ac.nz/) and as part of the [Dodd-Walls Centre for Photonic and Quantum Technologies](https://www.doddwalls.ac.nz). Our team is lead by [Professor Harald Schwefel](./author/harald-g.-l.-schwefel/). Our research is centered around resonantly enhanced nonlinear interactions. Currently we investigate optical frequency combs, coherent microwave to optics conversion, and other fundamental aspects. 
         ## Optical Resonators
         High quality optical resonators can confine, store, and therefore intensify light on a very small foot-print. Of particular interest to us are resonators based on the Whispering Gallery Mode (WGM) concept. Our group is known to make some of the world's highest quality WGM resonators. We like to address some fundamental questions with analytical and numerical solutions associated with such optical resonators. 
 

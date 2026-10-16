@@ -8,6 +8,7 @@ profile page.  It is run by CI on every pull request and can be run locally:
     python3 scripts/check_people.py            # from the repository root
 
 Exit status 1 = at least one error (fix before merging); warnings never fail.
+A person may be in several groups (e.g. Alumni and Visitors); that is not flagged.
 Messages use the GitHub Actions annotation format so they show up inline
 on the "Files changed" tab of a pull request.
 
@@ -136,9 +137,6 @@ def main() -> int:
                     )
             if len(ug) != len(set(ug)):
                 report("warning", index, "duplicate entries in 'user_groups'")
-            if "Alumni" in ug and len(ug) > 1:
-                others = ", ".join(g for g in ug if g != "Alumni")
-                report("warning", index, f"listed as Alumni and also as {others} - is that intended?")
 
         # --- links ----------------------------------------------------------
         for i, s in enumerate(fm.get("social") or []):

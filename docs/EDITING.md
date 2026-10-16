@@ -10,8 +10,10 @@ files in your browser; you do not need git or Hugo installed.
    left of the file list shows `draft`). Each commit is checked automatically
    (a green tick or red cross appears next to the commit on GitHub; red =
    something is broken, click *Details* to see what).
-2. A few minutes later your change appears on the preview site
-   (`https://…netlify.app`, ask Harald for the address).
+2. A few minutes later your change appears on the preview site,
+   <https://draft-resonantoptics.netlify.app/>. Each news post there has an
+   "Edit this page" link at the bottom that opens the right file on GitHub
+   (the published site does not show these links).
 3. Harald merges `draft` into `main` and publishes. Nothing is live until then,
    so you cannot break the public site.
 

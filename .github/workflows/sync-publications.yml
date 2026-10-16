@@ -2,7 +2,8 @@
 # open (or update) a pull request against `draft`.  Never touches `main`.
 #
 # - Needs the repository secret ZOTERO_API_KEY only if the group library is
-#   private.  With a public library no secret is required.
+#   private.  With a public library no secret is required.  The group id
+#   defaults to 6718035; set the repository variable ZOTERO_GROUP_ID to override.
 # - The site is built with the new publications before the PR is opened; if
 #   that build fails, no PR is created and this run shows red.
 # - PRs opened with the default GITHUB_TOKEN do not trigger the "Build check"
@@ -49,6 +50,7 @@ jobs:
       - name: Fetch the library and regenerate publication pages
         env:
           ZOTERO_API_KEY: ${{ secrets.ZOTERO_API_KEY }}
+          ZOTERO_GROUP_ID: ${{ vars.ZOTERO_GROUP_ID }} # optional repository variable; default is in the script
         run: python scripts/sync_publications.py --summary /tmp/sync-summary.md
 
       - name: Detect changes

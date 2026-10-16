@@ -115,6 +115,12 @@ def fetch_bibtex(group: str, collection: str | None, api_key: str | None, page_s
                         "readable (Group Settings > Library Reading: Anyone) or set ZOTERO_API_KEY to a key with "
                         "read access to the group."
                     )
+                if exc.code == 404:
+                    sys.exit(
+                        f"Zotero group {group} not found (404). Check the group id: it is the number in the group's "
+                        "URL on zotero.org (https://www.zotero.org/groups/<id>/...). Pass --group <id> or set the "
+                        "repository variable ZOTERO_GROUP_ID."
+                    )
                 raise
         if total is None:
             total = int(headers.get("Total-Results") or 0)
@@ -220,7 +226,8 @@ def run_converter(bib: Path, out: Path) -> None:
 # --------------------------------------------------------------------------- #
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--group", default=GROUP_ID, help=f"Zotero group id (default {GROUP_ID})")
+    ap.add_argument("--group", default=os.environ.get("ZOTERO_GROUP_ID") or GROUP_ID,
+                    help=f"Zotero group id (default: $ZOTERO_GROUP_ID or {GROUP_ID})")
     ap.add_argument("--collection", default=None, help="restrict to one Zotero collection key")
     ap.add_argument("--bib", type=Path, default=None, help="use this BibTeX file instead of the Zotero API")
     ap.add_argument("--dry-run", action="store_true", help="report what would change; write nothing")
