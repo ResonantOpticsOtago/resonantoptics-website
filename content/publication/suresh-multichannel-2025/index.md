@@ -1,12 +1,12 @@
 ---
 title: Multichannel upconversion of terahertz radiation in an optical disk resonator
 authors:
-- Mallika Irene Suresh
-- Florian Sedlmeir
+- mallika-irene-suresh
+- florian-sedlmeir
 - Dominik W. Vogt
 - Gabriel Santamaría Botello
 - Dmitry V. Strekalov
-- Harald G. L. Schwefel
+- harald-g.-l.-schwefel
 date: '2025-03-01'
 publication_types:
 - article-journal

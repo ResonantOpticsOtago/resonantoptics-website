@@ -1,8 +1,8 @@
 ---
 title: 'Efficient microwave to optical photon conversion: an electro-optical realization'
 authors:
-- Alfredo Rueda
-- Florian Sedlmeir
+- alfredo-rueda
+- florian-sedlmeir
 - Michele C. Collodo
 - Ulrich Vogl
 - Birgit Stiller
@@ -12,7 +12,7 @@ authors:
 - Johannes M. Fink
 - Oskar Painter
 - Gerd Leuchs
-- Harald G. L. Schwefel
+- harald-g.-l.-schwefel
 date: '2016-06-01'
 publication_types:
 - article-journal

@@ -3,9 +3,9 @@ title: Kerr microresonator dual-comb source with adjustable line-spacing
 authors:
 - Pierce C. Qureshi
 - Vincent Ng
-- Farhan Azeem
-- Luke S. Trainor
-- Harald G. L. Schwefel
+- farhan-azeem
+- luke-s.-trainor
+- harald-g.-l.-schwefel
 - Stéphane Coen
 - Miro Erkintalo
 - Stuart G. Murdoch

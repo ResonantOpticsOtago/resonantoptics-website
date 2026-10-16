@@ -1,7 +1,7 @@
 ---
 title: A chaotic approach clears up imaging
 authors:
-- Harald G. L. Schwefel
+- harald-g.-l.-schwefel
 - Hakan E. Türeci
 date: '2015-04-01'
 publication_types:

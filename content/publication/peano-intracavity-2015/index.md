@@ -1,10 +1,10 @@
 ---
 title: Intracavity Squeezing Can Enhance Quantum-Limited Optomechanical Position Detection through Deamplification
 authors:
-- Vittorio Peano
-- Harald G. L. Schwefel
-- Christoph Marquardt
-- Florian Marquardt
+- V. Peano
+- harald-g.-l.-schwefel
+- Ch. Marquardt
+- F. Marquardt
 date: '2015-12-01'
 publication_types:
 - article-journal

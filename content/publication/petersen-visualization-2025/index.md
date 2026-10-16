@@ -1,12 +1,12 @@
 ---
 title: Visualization and selective manipulation of sub-terahertz whispering gallery modes
 authors:
-- Anna R. Petersen
-- Pablo Paulsen
-- Florian Sedlmeir
-- Nicholas J. Lambert
-- Harald G. L. Schwefel
-- Mallika Irene Suresh
+- anna-r.-petersen
+- pablo-paulsen
+- florian-sedlmeir
+- nicholas-j.-lambert
+- harald-g.-l.-schwefel
+- mallika-irene-suresh
 date: '2025-11-01'
 publication_types:
 - article-journal

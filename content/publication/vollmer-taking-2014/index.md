@@ -2,7 +2,7 @@
 title: 'Taking detection to the limit with optical microcavities: Recent advances presented at the 560. WE Heraeus Seminar'
 authors:
 - Frank Vollmer
-- Harald G. L. Schwefel
+- harald-g.-l.-schwefel
 date: '2014-09-01'
 publication_types:
 - article-journal

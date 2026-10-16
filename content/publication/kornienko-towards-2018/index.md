@@ -3,9 +3,9 @@ title: Towards terahertz detection and calibration through spontaneous parametri
 authors:
 - Vladimir V. Kornienko
 - Galiya Kh. Kitaeva
-- Florian Sedlmeir
+- florian-sedlmeir
 - Gerd Leuchs
-- Harald G. L. Schwefel
+- harald-g.-l.-schwefel
 date: '2018-03-01'
 publication_types:
 - article-journal

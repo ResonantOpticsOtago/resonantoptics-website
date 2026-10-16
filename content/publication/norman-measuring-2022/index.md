@@ -2,9 +2,9 @@
 title: Measuring optical loss in yttrium orthosilicate using a whispering gallery mode resonator
 authors:
 - Daniel S. Norman
-- Farhan Azeem
+- farhan-azeem
 - Jevon J. Longdell
-- Harald G. L. Schwefel
+- harald-g.-l.-schwefel
 date: '2022-02-01'
 publication_types:
 - article-journal

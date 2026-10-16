@@ -6,7 +6,7 @@ authors:
 - Avner Fleischer
 - Alex Kaplan
 - Tal Carmon
-- Harald G. L. Schwefel
+- harald-g.-l.-schwefel
 - Guy Bartal
 - Oren Cohen
 date: '2012-06-01'

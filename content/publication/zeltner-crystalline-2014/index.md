@@ -1,10 +1,10 @@
 ---
-title: Crystalline MgF$_2$ whispering gallery mode resonators for enhanced bulk index sensitivity
+title: Crystalline MgF2 whispering gallery mode resonators for enhanced bulk index sensitivity
 authors:
-- Richard Zeltner
-- Florian Sedlmeir
-- Gerd Leuchs
-- Harald G. L. Schwefel
+- R. Zeltner
+- florian-sedlmeir
+- G. Leuchs
+- harald-g.-l.-schwefel
 date: '2014-09-01'
 publication_types:
 - article-journal

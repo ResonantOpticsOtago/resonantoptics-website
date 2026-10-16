@@ -2,19 +2,19 @@
 title: Dielectric Rod Waveguide Antenna as THz Emitter for Photomixing Devices
 authors:
 - A. Rivera-Lavado
-- Sascha Preu
-- Luis Enrique García-Muñoz
+- S. Preu
+- L.E. Garcia-Munoz
 - A. Generalov
 - J. Montero-de-Paz
-- Gottfried H. Döhler
+- G. Dohler
 - D. Lioubtchenko
-- M. Méndez-Aller
-- Florian Sedlmeir
-- Martin Schneidereit
-- Harald G. L. Schwefel
-- Stefan Malzer
+- M. Mendez-Aller
+- florian-sedlmeir
+- M. Schneidereit
+- H.G.L. Schwefel
+- S. Malzer
 - D. Segovia-Vargas
-- A. V. Räisänen
+- A.V. Raisanen
 date: '2015-03-01'
 publication_types:
 - article-journal
@@ -24,23 +24,23 @@ abstract: We propose a dielectric rod waveguide antenna (DRW) integrated with a 
 tags:
 - Antenna measurements
 - Antenna radiation patterns
-- dielectric resonators
-- dielectric rod waveguide antenna
 - Dielectric rod waveguide (DRW) antenna
 - Dielectrics
+- Lenses
+- THz antenna
+- THz emitter
+- dielectric resonators
+- dielectric rod waveguide antenna
 - electromagnetic wave scattering
 - frequency 137 GHz
 - high index whispering gallery mode resonator
 - integrated emitter
-- Lenses
 - photomixer
 - photomixing devices
 - semiconductor-air interface
 - substrates
-- terahertz-generated power scattering
 - terahertz wave devices
-- THz antenna
-- THz emitter
+- terahertz-generated power scattering
 - waveguide antennas
 - whispering gallery mode resonators
 ---

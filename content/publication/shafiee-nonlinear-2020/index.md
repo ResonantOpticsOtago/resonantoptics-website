@@ -4,10 +4,10 @@ authors:
 - Golnoush Shafiee
 - Dmitry V. Strekalov
 - Alexander Otterpohl
-- Florian Sedlmeir
+- florian-sedlmeir
 - Gerhard Schunk
 - Ulrich Vogl
-- Harald G. L. Schwefel
+- harald-g.-l.-schwefel
 - Gerd Leuchs
 - Christoph Marquardt
 date: '2020-07-01'

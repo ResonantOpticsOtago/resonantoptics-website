@@ -78,9 +78,29 @@ jobs:
 
       - name: Build the site with the new publications
         if: steps.changes.outputs.changed == 'true'
+        id: build
+        continue-on-error: true # the PR is opened either way; the result is written into it
         env:
           HUGO_ENVIRONMENT: production
-        run: hugo --gc --minify --baseURL "$SITE_URL"
+        run: |
+          hugo --gc --minify --baseURL "$SITE_URL" 2>&1 | tee /tmp/build.log
+          test "${PIPESTATUS[0]}" -eq 0
+
+      - name: Record the build result in the PR text
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          if [ "${{ steps.build.outcome }}" = "success" ]; then
+            printf '\nSite build with these changes: passed.\n' >> /tmp/sync-summary.md
+          else
+            {
+              printf '\n## Site build FAILED with these changes\n\n'
+              printf 'Usually a page still links to a publication that left Zotero (see the lines below). '
+              printf 'Either add the paper back to Zotero and re-run the sync, or fix the link in this branch.\n\n```\n'
+              grep -E '^ERROR' /tmp/build.log | head -20
+              printf '```\n'
+            } >> /tmp/sync-summary.md
+          fi
+          cat /tmp/sync-summary.md >> "$GITHUB_STEP_SUMMARY"
 
       - name: Open or update the pull request
         if: steps.changes.outputs.changed == 'true'
@@ -93,7 +113,11 @@ jobs:
           commit-message: "content: sync publications from Zotero"
           title: "Publications: sync from Zotero"
           body-path: /tmp/sync-summary.md
-          labels: automated-pr, publications
+          labels: ${{ steps.build.outcome == 'success' && 'automated-pr, publications' || 'automated-pr, publications, build-failed' }}
           add-paths: |
             publications.bib
-            content/publication/
+            content/
+
+      - name: Fail the run if the build failed (the PR has the details)
+        if: steps.changes.outputs.changed == 'true' && steps.build.outcome != 'success'
+        run: exit 1

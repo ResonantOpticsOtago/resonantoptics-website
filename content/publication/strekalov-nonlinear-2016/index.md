@@ -4,9 +4,9 @@ authors:
 - Dmitry V. Strekalov
 - Christoph Marquardt
 - Andrey B. Matsko
-- Harald G. L. Schwefel
+- harald-g.-l.-schwefel
 - Gerd Leuchs
-date: '2016-11-01'
+date: '2016-01-01'
 publication_types:
 - article-journal
 publication: '*Journal of Optics*'

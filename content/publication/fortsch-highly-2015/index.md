@@ -7,8 +7,8 @@ authors:
 - Dmitry Strekalov
 - Thomas Gerrits
 - Martin J. Stevens
-- Florian Sedlmeir
-- Harald G. L. Schwefel
+- florian-sedlmeir
+- harald-g.-l.-schwefel
 - Sae Woo Nam
 - Gerd Leuchs
 - Christoph Marquardt

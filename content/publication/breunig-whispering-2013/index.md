@@ -1,11 +1,11 @@
 ---
 title: 'Whispering gallery modes at the rim of an axisymmetric optical resonator: Analytical versus numerical description and comparison with experiment'
 authors:
-- Ingo Breunig
-- Boris Sturman
-- Florian Sedlmeir
-- Harald G. L. Schwefel
-- Karsten Buse
+- I. Breunig
+- B. Sturman
+- florian-sedlmeir
+- harald-g.-l.-schwefel
+- K. Buse
 date: '2013-12-01'
 publication_types:
 - article-journal

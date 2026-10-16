@@ -12,6 +12,9 @@ assets/jsconfig.json
 # Local publish settings (contains the rsync target for the university server)
 publish.conf
 
+# venv environment
+.venv/
+
 # Node (needed only once the site moves to the Tailwind-based theme)
 node_modules/
 

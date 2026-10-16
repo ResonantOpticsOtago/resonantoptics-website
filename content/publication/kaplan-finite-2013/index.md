@@ -7,7 +7,7 @@ authors:
 - Maxim Kozlov
 - Oren Cohen
 - Guy Bartal
-- Harald G. L. Schwefel
+- harald-g.-l.-schwefel
 date: '2013-06-01'
 publication_types:
 - article-journal

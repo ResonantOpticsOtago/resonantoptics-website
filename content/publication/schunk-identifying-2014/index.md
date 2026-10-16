@@ -6,8 +6,8 @@ authors:
 - Michael Förtsch
 - Dmitry V. Strekalov
 - Ulrich Vogl
-- Florian Sedlmeir
-- Harald G. L. Schwefel
+- florian-sedlmeir
+- harald-g.-l.-schwefel
 - Gerd Leuchs
 - Christoph Marquardt
 date: '2014-12-01'

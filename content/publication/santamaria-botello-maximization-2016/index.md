@@ -1,18 +1,18 @@
 ---
 title: Maximization of the optical intra-cavity power of whispering-gallery mode resonators via coupling prism
 authors:
-- Gabriel A. Santamaría-Botello
-- Luis Enrique García Muñoz
-- Florian Sedlmeir
-- Sascha Preu
+- G. A. Santamaría-Botello
+- L. E. García Muñoz
+- florian-sedlmeir
+- S. Preu
 - D. Segovia-Vargas
 - K. Atia Abdalmalak
 - S. Llorente Romano
 - A. García Lampérez
-- Stefan Malzer
-- Gottfried H. Döhler
-- Harald G. L. Schwefel
-- Heiko B. Weber
+- S. Malzer
+- G. H. Döhler
+- harald-g.-l.-schwefel
+- H. B. Weber
 date: '2016-11-01'
 publication_types:
 - article-journal

@@ -2,6 +2,8 @@
 """Validate the people profiles in content/authors/.
 
 One folder per person: content/authors/<slug>/_index.md (+ avatar.jpg/png).
+The folder name is the person's stable identifier (used in `authors:` lists of
+posts and publications); the display name is the `title` and is independent.
 This script checks the things that silently break the People page or a
 profile page.  It is run by CI on every pull request and can be run locally:
 
@@ -35,6 +37,15 @@ LINK_RE = re.compile(r"^(https?://|mailto:|#)")
 
 errors = 0
 warnings = 0
+
+
+def hugo_urlize(s: str) -> str:
+    """Approximation of Hugo's urlize(), which turns an author name into its taxonomy slug."""
+    import unicodedata
+    s = unicodedata.normalize("NFC", s.strip().lower())
+    s = re.sub(r"\s+", "-", s)
+    s = "".join(c for c in s if c.isalnum() or c in ".-_/+~@#")
+    return re.sub(r"-{2,}", "-", s).strip("-")
 
 
 def report(level: str, path: Path, msg: str) -> None:
@@ -97,10 +108,13 @@ def main() -> int:
         slug = folder.name
 
         # --- identity -------------------------------------------------------
-        title = str(fm.get("title") or "").strip()
+        raw_title = str(fm.get("title") or "")
+        title = " ".join(raw_title.split())
         if not title:
             report("error", index, "'title' (display name) is missing")
-        elif title in seen_titles:
+        elif raw_title != title:
+            report("warning", index, "'title' has leading/trailing/double spaces; remove them")
+        if title in seen_titles:
             report("warning", index, f"same display name as {seen_titles[title].relative_to(ROOT)}")
         else:
             seen_titles[title] = index
@@ -117,7 +131,9 @@ def main() -> int:
             )
 
         if not str(fm.get("last_name") or "").strip():
-            report("error", index, "'last_name' is missing (the People page sorts by it)")
+            report("error", index, "'last_name' is missing (the People page sorts by it; publications are matched by it)")
+        if not str(fm.get("first_name") or "").strip():
+            report("warning", index, "'first_name' is missing (used to match this person's name on publications)")
         if not str(fm.get("role") or "").strip():
             report("warning", index, "'role' is empty (shown under the name on the People page)")
 

@@ -5,8 +5,8 @@ authors:
 - Ulrich Vogl
 - Dmitry V. Strekalov
 - Michael Förtsch
-- Florian Sedlmeir
-- Harald G. L. Schwefel
+- florian-sedlmeir
+- harald-g.-l.-schwefel
 - Manuela Göbelt
 - Silke Christiansen
 - Gerd Leuchs

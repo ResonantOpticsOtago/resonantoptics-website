@@ -19,9 +19,9 @@ authors:
 - Patricia Fuentes-Cross
 - Peter K. Dearden
 - Neil J. Gemmell
-- Farhan Azeem
+- farhan-azeem
 - Marvin Weyland
-- Harald G. L. Schwefel
+- harald-g.-l.-schwefel
 - Cock van Oosterhout
 - Hernán E. Morales
 date: '2024-09-01'

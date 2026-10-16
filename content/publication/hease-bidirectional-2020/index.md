@@ -2,11 +2,11 @@
 title: Bidirectional Electro-Optic Wavelength Conversion in the Quantum Ground State
 authors:
 - William Hease
-- Alfredo Rueda
+- alfredo-rueda
 - Rishabh Sahu
 - Matthias Wulf
 - Georg Arnold
-- Harald G. L. Schwefel
+- harald-g.-l.-schwefel
 - Johannes M. Fink
 date: '2020-11-01'
 publication_types:

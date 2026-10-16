@@ -1,12 +1,12 @@
 ---
 title: Coherent control of magnon–polaritons using an exceptional point
 authors:
-- Nicholas J. Lambert
-- Jevon J. Longdell
-- Harald G. L. Schwefel
-- Alexander Schumer
-- Stefan Rotter
-date: '2025-08-01'
+- nicholas-j.-lambert
+- A. Schumer
+- J. J. Longdell
+- S. Rotter
+- harald-g.-l.-schwefel
+date: '2025-10-01'
 publication_types:
 - article-journal
 publication: '*Nature Physics*'

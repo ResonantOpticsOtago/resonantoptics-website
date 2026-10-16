@@ -190,6 +190,124 @@ def write_bundle(index: Path, fm: dict, body: str) -> None:
     index.write_text(text, encoding="utf-8")
 
 
+def hugo_urlize(s: str) -> str:
+    """Approximation of Hugo's urlize(), which turns an author name into its taxonomy slug."""
+    import unicodedata
+    s = unicodedata.normalize("NFC", s.strip().lower())
+    s = re.sub(r"\s+", "-", s)
+    s = "".join(c for c in s if c.isalnum() or c in ".-_/+~@#")
+    return re.sub(r"-{2,}", "-", s).strip("-")
+
+
+def load_profiles() -> list[tuple[str, str, list[str]]]:
+    """Group members from content/authors: (folder slug, last name, given-name tokens).
+    The slug is the stable identifier used in `authors:` lists; the display name
+    comes from the profile, so folder names are free."""
+    out = []
+    authors_dir = ROOT / "content" / "authors"
+    if not authors_dir.is_dir():
+        return out
+    for d in sorted(p for p in authors_dir.iterdir() if p.is_dir()):
+        f = d / "_index.md"
+        if not f.exists():
+            continue
+        fm, _ = read_bundle(f)
+        title = " ".join(str(fm.get("title") or "").split())
+        last = str(fm.get("last_name") or "").strip() or (title.split()[-1] if title else "")
+        first = str(fm.get("first_name") or "").strip()
+        if not last:
+            continue
+        given = first.split() if first else (title[: len(title) - len(last)].split() if title.lower().endswith(last.lower()) else [])
+        out.append((d.name, last, given))
+    return out
+
+
+def _name_tok(t: str) -> str:
+    return t.strip("().,").lower()
+
+
+def _latin(t: str) -> bool:
+    return bool(re.search(r"[A-Za-z\u00C0-\u024F]", t))
+
+
+def _tok_compatible(author_tok: str, profile_tok: str) -> bool:
+    a, p = _name_tok(author_tok), _name_tok(profile_tok)
+    if not a or not p:
+        return False
+    if len(a) == 1:  # an initial
+        return p.startswith(a)
+    return a == p
+
+
+def normalise_author(name: str, profiles: list[tuple[str, str, list[str]]]) -> str:
+    """Replace a group member's name by the member's profile slug when exactly
+    one member fits: same last name and a compatible first name (a full name
+    must be equal, an initial must match); middle names/initials are ignored,
+    as are tokens without Latin letters. The theme then links the author to the
+    profile and displays the profile's title, whatever spelling Zotero had.
+    Non-members are returned unchanged."""
+    name = " ".join(name.split())
+    if not name:
+        return name
+    matches = []
+    for slug, last, given in profiles:
+        if name.lower() == slug:
+            return slug
+        if not name.lower().endswith(" " + last.lower()):
+            continue
+        atoks = [t for t in name[: len(name) - len(last)].split() if _latin(t)]
+        ptoks = [t for t in given if _latin(t)]
+        if not atoks or not ptoks or not _tok_compatible(atoks[0], ptoks[0]):
+            continue
+        i, ok = 1, True
+        for ptok in ptoks[1:]:  # further profile given names must appear in order
+            while i < len(atoks) and not _tok_compatible(atoks[i], ptok):
+                i += 1
+            if i == len(atoks):
+                ok = False
+                break
+            i += 1
+        if ok:
+            matches.append(slug)
+    return matches[0] if len(matches) == 1 else name
+
+
+def content_references(slug: str) -> list[Path]:
+    """Content files that link to a publication folder (ref/relref shortcodes or plain links)."""
+    hits = []
+    pat = re.compile(r"publication/" + re.escape(slug) + r"(?![\w-])")
+    for f in (ROOT / "content").rglob("*.md"):
+        if f.parent == PUB_DIR / slug:
+            continue
+        try:
+            if pat.search(f.read_text(encoding="utf-8")):
+                hits.append(f)
+        except UnicodeDecodeError:
+            pass
+    return hits
+
+
+def rewrite_references(old: str, new: str, dry_run: bool) -> list[Path]:
+    """Point links at a renamed publication folder to its new name."""
+    pat = re.compile(r"publication/" + re.escape(old) + r"(?![\w-])")
+    changed = []
+    for f in content_references(old):
+        text = f.read_text(encoding="utf-8")
+        new_text = pat.sub("publication/" + new, text)
+        if new_text != text:
+            changed.append(f)
+            if not dry_run:
+                f.write_text(new_text, encoding="utf-8")
+    return changed
+
+
+def identity(fm: dict) -> tuple[str | None, str | None]:
+    """(doi, normalised title) used to recognise the same paper under a new citation key."""
+    doi = str(fm.get("doi") or "").strip().lower() or None
+    title = re.sub(r"[^a-z0-9]+", " ", str(fm.get("title") or "").lower()).strip() or None
+    return doi, title
+
+
 def merge(generated: dict, old: dict | None) -> dict:
     fm = {k: v for k, v in generated.items() if k not in EPHEMERAL_KEYS}
     # `featured` used to be expressed as an extra entry in publication_types.
@@ -210,10 +328,31 @@ def merge(generated: dict, old: dict | None) -> dict:
     return fm
 
 
+MIN_ACADEMIC = (0, 10, 0)  # first release with the `academic import <bib> <out>` syntax
+
+
+def check_converter_version() -> None:
+    """Refuse to run with an old `academic` whose CLI silently ignores our arguments."""
+    py = ".".join(str(n) for n in sys.version_info[:3])
+    try:
+        from importlib.metadata import version
+        v = version("academic")
+    except Exception:  # noqa: BLE001
+        sys.exit(f"The 'academic' package is not installed for {sys.executable} (Python {py}). "
+                 "academic >= 0.10 needs Python >= 3.11.5. With a recent Python run: "
+                 "python3.12 -m pip install academic==0.11.2 pyyaml, then start this script with python3.12.")
+    parts = tuple(int(x) for x in re.findall(r"\d+", v)[:3])
+    if parts < MIN_ACADEMIC:
+        sys.exit(f"academic {v} is too old (need >= 0.10.0): its command line is different and ignores our "
+                 f"arguments without any error. Newer releases need Python >= 3.11.5; this is Python {py} "
+                 f"at {sys.executable}. Install Python 3.12 and run: python3.12 -m pip install academic==0.11.2 pyyaml")
+    print(f"using academic {v} from {sys.executable} (Python {py})")
+
+
 def run_converter(bib: Path, out: Path) -> None:
-    exe = shutil.which("academic")
-    cmd = [exe] if exe else [sys.executable, "-m", "academic.cli"]
-    cmd += ["import", str(bib), str(out) + "/", "--compact"]
+    # Always the interpreter running this script, never whatever `academic` is
+    # first on PATH: an old copy there silently does nothing (see check above).
+    cmd = [sys.executable, "-m", "academic.cli", "import", str(bib), str(out) + "/", "--compact"]
     res = subprocess.run(cmd, capture_output=True, text=True)
     if res.returncode != 0:
         print(res.stdout, res.stderr, file=sys.stderr)
@@ -234,7 +373,10 @@ def main() -> int:
     ap.add_argument("--allow-shrink", action="store_true",
                     help="proceed even if the library has far fewer entries than the site")
     ap.add_argument("--summary", type=Path, default=None, help="write a Markdown summary to this file")
+    ap.add_argument("--save-bib", type=Path, default=None,
+                    help="also write the fetched (normalised) BibTeX to this file, even in a dry run")
     args = ap.parse_args()
+    check_converter_version()
 
     if not PUB_DIR.is_dir():
         sys.exit(f"{PUB_DIR} not found; run from the repository")
@@ -244,6 +386,9 @@ def main() -> int:
     )
     bibtex = normalise_bibtex(raw)
     entries = split_entries(bibtex)
+    if args.save_bib:
+        args.save_bib.write_text(bibtex, encoding="utf-8")
+        print(f"saved the fetched BibTeX to {args.save_bib}")
     if not entries:
         sys.exit("no BibTeX entries found; refusing to continue")
 
@@ -256,6 +401,7 @@ def main() -> int:
         )
         return 2
 
+    mapped: dict[str, str] = {}
     with tempfile.TemporaryDirectory() as tmp:
         tmp_bib = Path(tmp) / "publications.bib"
         tmp_bib.write_text(bibtex, encoding="utf-8")
@@ -264,10 +410,56 @@ def main() -> int:
         run_converter(tmp_bib, gen_dir)
 
         added, updated, unchanged, removed, kept = [], [], [], [], []
+        renamed: list[tuple[str, str, list[Path]]] = []
+        duplicates: list[tuple[str, str]] = []
         generated = {p.name: p for p in gen_dir.iterdir() if p.is_dir()}
+        # The converter must have produced a page for (nearly) every entry;
+        # otherwise every existing folder would look "removed".  Never go on.
+        if not generated:
+            sys.exit(f"the converter produced no pages from {len(entries)} BibTeX entries; nothing was changed. "
+                     "Run with --save-bib FILE and inspect the file, or send it to the maintainer.")
+        if len(generated) < 0.8 * len(entries) and not args.allow_shrink:
+            sys.exit(f"the converter produced only {len(generated)} pages from {len(entries)} entries; "
+                     "nothing was changed. Check the BibTeX (--save-bib FILE) or use --allow-shrink.")
 
+        # --- same paper, new citation key? (matched by DOI, else by title) ---
+        gen_ids = {slug: identity(read_bundle(gp / "index.md")[0]) for slug, gp in generated.items()}
+        seen_doi: dict[str, str] = {}
+        for slug, (doi, _) in sorted(gen_ids.items()):
+            if doi and doi in seen_doi:
+                duplicates.append((seen_doi[doi], slug))
+            elif doi:
+                seen_doi[doi] = slug
+        old_ids = {slug: identity(read_bundle(path / "index.md")[0])
+                   for slug, path in existing.items() if (path / "index.md").exists()}
+        for slug in sorted(generated):
+            if slug in existing:
+                continue
+            doi, title = gen_ids[slug]
+            taken = {n for _, n, _ in renamed}
+            cands = [o for o, (od, ot) in old_ids.items()
+                     if o not in generated and o not in taken
+                     and ((doi and od == doi) or (not doi and title and ot == title))]
+            if len(cands) == 1:
+                old_slug = cands[0]
+                refs = rewrite_references(old_slug, slug, args.dry_run)
+                renamed.append((old_slug, slug, refs))
+                if not args.dry_run:
+                    shutil.move(str(existing[old_slug]), str(PUB_DIR / slug))
+                existing[slug] = existing.pop(old_slug)
+                old_ids.pop(old_slug, None)
+
+        profiles = load_profiles()
         for slug, gpath in sorted(generated.items()):
             gfm, _ = read_bundle(gpath / "index.md")
+            if gfm.get("authors"):
+                fixed = []
+                for a in gfm["authors"]:
+                    n = normalise_author(str(a), profiles)
+                    if n != " ".join(str(a).split()):
+                        mapped[str(a)] = n
+                    fixed.append(n)
+                gfm["authors"] = fixed
             target = PUB_DIR / slug
             old_fm, old_body = (read_bundle(target / "index.md") if (target / "index.md").exists() else (None, ""))
             fm = merge(gfm, old_fm)
@@ -276,7 +468,10 @@ def main() -> int:
             write_bundle(probe, fm, old_body)
             new_text = probe.read_text(encoding="utf-8")
             new_cite = (gpath / "cite.bib").read_text(encoding="utf-8")
-            if not target.exists():
+            renamed_to = {n for _, n, _ in renamed}
+            if slug in renamed_to:
+                pass  # reported under "Renamed"
+            elif not target.exists():
                 added.append(slug)
             else:
                 same_md = (target / "index.md").exists() and (target / "index.md").read_text(encoding="utf-8") == new_text
@@ -291,10 +486,12 @@ def main() -> int:
             if slug in generated:
                 continue
             extra = sorted(set(os.listdir(path)) - GENERATED_FILES)
+            refs = content_references(slug)
+            note = (" - still linked from " + ", ".join(str(r.relative_to(ROOT)) for r in refs)) if refs else ""
             if extra:
-                kept.append(f"{slug} (has {', '.join(extra)})")
+                kept.append(f"{slug} (has {', '.join(extra)}){note}")
             else:
-                removed.append(slug)
+                removed.append(slug + note)
                 if not args.dry_run:
                     shutil.rmtree(path)
 
@@ -303,13 +500,23 @@ def main() -> int:
 
     lines = [f"Publication sync from Zotero group {args.group}" + (" (dry run)" if args.dry_run else ""), ""]
     lines.append(f"- {len(entries)} entries in the library, {len(existing)} folders on the site before the sync")
+    if renamed:
+        lines.append(f"- **Renamed** (same paper, new citation key; folder contents moved along) ({len(renamed)}): "
+                     + ", ".join(f"`{o}` → `{n}`" + (f" (links updated in {', '.join(str(r.relative_to(ROOT)) for r in refs)})" if refs else "")
+                                 for o, n, refs in renamed))
     for label, items in (("Added", added), ("Updated", updated), ("Removed (no longer in Zotero)", removed)):
         if items:
             lines.append(f"- **{label}** ({len(items)}): " + ", ".join(f"`{s}`" for s in items))
+    if duplicates:
+        lines.append(f"- **Possible duplicates in Zotero** (same DOI) ({len(duplicates)}): "
+                     + ", ".join(f"`{a}` and `{b}`" for a, b in duplicates))
     if kept:
         lines.append(f"- **Kept although not in Zotero** ({len(kept)}, they contain extra files - check whether the "
                      "citation key changed and move the files): " + ", ".join(f"`{s}`" for s in kept))
     lines.append(f"- Unchanged: {len(unchanged)}")
+    if mapped:
+        lines.append(f"- Member names replaced by their profile identifier ({len(mapped)}): "
+                     + ", ".join(f"{a} → {b}" for a, b in sorted(mapped.items())))
     summary = "\n".join(lines)
     print(summary)
     if args.summary:

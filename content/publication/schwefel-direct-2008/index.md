@@ -1,8 +1,8 @@
 ---
 title: Direct experimental observation of the single reflection optical Goos-Hänchen shift
 authors:
-- Harald G. L. Schwefel
-- Wolfgang Köhler
+- harald-g.-l.-schwefel
+- W. Köhler
 - Z. H. Lu
 - J. Fan
 - L. J. Wang

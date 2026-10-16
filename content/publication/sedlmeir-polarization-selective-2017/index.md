@@ -1,7 +1,7 @@
 ---
 title: Polarization-Selective Out-Coupling of Whispering-Gallery Modes
 authors:
-- Florian Sedlmeir
+- florian-sedlmeir
 - Matthew R. Foreman
 - Ulrich Vogl
 - Richard Zeltner
@@ -9,7 +9,7 @@ authors:
 - Dmitry V. Strekalov
 - Christoph Marquardt
 - Gerd Leuchs
-- Harald G. L. Schwefel
+- harald-g.-l.-schwefel
 date: '2017-02-01'
 publication_types:
 - article-journal

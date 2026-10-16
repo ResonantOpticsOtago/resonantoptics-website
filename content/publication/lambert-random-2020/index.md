@@ -1,11 +1,11 @@
 ---
 title: Random telegraph signal analysis with a recurrent neural network
 authors:
-- Nicholas J. Lambert
+- nicholas-j.-lambert
 - A. A. Esmail
 - M. Edwards
 - A. J. Ferguson
-- Harald G. L. Schwefel
+- harald-g.-l.-schwefel
 date: '2020-07-01'
 publication_types:
 - article-journal

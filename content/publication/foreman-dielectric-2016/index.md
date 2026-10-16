@@ -2,8 +2,8 @@
 title: Dielectric tuning and coupling of whispering gallery modes using an anisotropic prism
 authors:
 - Matthew R. Foreman
-- Florian Sedlmeir
-- Harald G. L. Schwefel
+- florian-sedlmeir
+- harald-g.-l.-schwefel
 - Gerd Leuchs
 date: '2016-11-01'
 publication_types:

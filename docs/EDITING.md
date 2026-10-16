@@ -84,13 +84,15 @@ Below the second `---` you can write a longer biography in Markdown.
 Photo: upload a square JPEG named `avatar.jpg` into your folder (*Add file →
 Upload files*); it replaces the old one. 400×400 pixels is plenty.
 
-Do not rename your folder. Its name is your identifier; posts and the People
-page use it.
+Do not rename your folder. Its name is your identifier; posts and
+publications refer to you by it. Your display name (`title`) and your page's
+address come from the title, so you can change the title freely.
 
 ## Adding a person
 
-Create `content/authors/firstname-lastname/_index.md` (lower case, hyphens)
-with this template, then upload `avatar.jpg` into the folder:
+Create `content/authors/firstname-lastname/_index.md` (lower case, hyphens;
+this is the person's identifier and should not change later) with this
+template, then upload `avatar.jpg` into the folder:
 
 ```yaml
 ---
@@ -139,8 +141,9 @@ Three things are done in the repository, in the paper's folder
 - give it a thumbnail: upload `featured.jpg` (or `.png`) into the folder;
 - say something about it: write Markdown below the closing `---` of `index.md`.
 
-These survive future syncs. Your name links to your profile when it is
-written exactly as in your profile's `title`.
+These survive future syncs. Group members are recognised by the `first_name`
+and `last_name` in their profile, so keep those as on your papers; the
+publication then shows your profile's display name and links to it.
 
 ## Checking your work
 

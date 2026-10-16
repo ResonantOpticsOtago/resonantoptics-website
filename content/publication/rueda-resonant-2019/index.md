@@ -1,11 +1,11 @@
 ---
 title: Resonant electro-optic frequency comb
 authors:
-- Alfredo Rueda
-- Florian Sedlmeir
-- Madhuri Kumari
+- alfredo-rueda
+- florian-sedlmeir
+- madhuri-kumari
 - Gerd Leuchs
-- Harald G. L. Schwefel
+- harald-g.-l.-schwefel
 date: '2019-04-01'
 publication_types:
 - article-journal

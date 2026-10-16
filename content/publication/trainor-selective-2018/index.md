@@ -1,10 +1,10 @@
 ---
 title: Selective Coupling Enhances Harmonic Generation of Whispering-Gallery Modes
 authors:
-- Luke S. Trainor
-- Florian Sedlmeir
+- luke-s.-trainor
+- florian-sedlmeir
 - Christian Peuntinger
-- Harald G. L. Schwefel
+- harald-g.-l.-schwefel
 date: '2018-02-01'
 publication_types:
 - article-journal

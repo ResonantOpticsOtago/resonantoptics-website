@@ -1,12 +1,12 @@
 ---
 title: Thermal noise in electro-optic devices at cryogenic temperatures
 authors:
-- Sonia Mobassem
-- Nicholas J. Lambert
-- Alfredo Rueda
+- sonia-mobassem
+- nicholas-j.-lambert
+- alfredo-rueda
 - Johannes M. Fink
 - Gerd Leuchs
-- Harald G. L. Schwefel
+- harald-g.-l.-schwefel
 date: '2021-07-01'
 publication_types:
 - article-journal

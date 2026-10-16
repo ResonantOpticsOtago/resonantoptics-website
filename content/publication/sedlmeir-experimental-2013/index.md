@@ -1,11 +1,11 @@
 ---
 title: Experimental characterization of an uniaxial angle cut whispering gallery mode resonator
 authors:
-- Florian Sedlmeir
+- florian-sedlmeir
 - Martin Hauer
 - Josef U. Fürst
 - Gerd Leuchs
-- Harald G. L. Schwefel
+- harald-g.-l.-schwefel
 date: '2013-10-01'
 publication_types:
 - article-journal

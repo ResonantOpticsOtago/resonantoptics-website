@@ -1,10 +1,10 @@
 ---
-title: 'Broadband NIR photoluminescence from Bi-doped Ba$_2$P$_2$O$_7$ crystals: Insights into the nature of NIR-emitting Bismuth centers'
+title: 'Broadband NIR photoluminescence from Bi-doped Ba2P2O7 crystals: Insights into the nature of NIR-emitting Bismuth centers'
 authors:
 - Mingying Peng
 - Benjamin Sprenger
 - Markus A. Schmidt
-- Harald G. L. Schwefel
+- harald-g.-l.-schwefel
 - Lothar Wondraczek
 date: '2010-06-01'
 publication_types:

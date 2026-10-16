@@ -3,8 +3,8 @@ title: Steady states, squeezing, and entanglement in intracavity triplet down co
 authors:
 - M. D. E. Denys
 - M. K. Olsen
-- Luke S. Trainor
-- Harald G. L. Schwefel
+- luke-s.-trainor
+- harald-g.-l.-schwefel
 - A. S. Bradley
 date: '2020-12-01'
 publication_types:

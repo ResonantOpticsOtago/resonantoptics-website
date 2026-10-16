@@ -129,7 +129,8 @@ The workflow needs no secrets. It never deploys.
 on demand from the Actions tab): it checks out `draft`, runs
 `scripts/sync_publications.py` (section 8), builds the site with the result,
 and if anything changed opens or updates the PR `auto/publications` against
-`draft`. It needs the secret `ZOTERO_API_KEY` only while the Zotero group
+`draft`. If the build fails, the PR is still opened, labelled `build-failed`,
+with the Hugo errors in its text, and the run shows red. It needs the secret `ZOTERO_API_KEY` only while the Zotero group
 library is private. Because PRs opened with the built-in token do not trigger
 other workflows, the build happens inside this job; optionally store a
 fine-grained personal access token as `PUBLICATIONS_PR_TOKEN` and the normal
@@ -191,6 +192,16 @@ these rules (run it locally with `python3 scripts/check_people.py`).
 When somebody leaves: change `user_groups:` to `- Alumni` (and nothing else),
 keep the folder; their publications and posts keep linking to the profile.
 
+How people are referenced: the folder name is the person's identifier and
+is what `authors:` lists in posts and publications contain
+(`authors: [harald-g.-l.-schwefel]`). Hugo shows the profile's `title` and
+links to the profile page, whose address is derived from the title
+(`/author/harald-g.-l.-schwefel/`), so folder name, display name and URL are
+independent. Never put a display name in an `authors:` list for a member: it
+creates a second, empty author page. The publication sync does this
+substitution automatically (section 8). Renaming a folder therefore only
+requires replacing the identifier in `authors:` lists; the URL does not change.
+
 ## 8. Publications
 
 **Zotero group 6718035 is the source of truth for bibliographic data.** Add,
@@ -208,10 +219,22 @@ What the sync does (`scripts/sync_publications.py`):
    fields (`featured`, `image`, `projects`, `summary`, `url_*`, `slides`,
    `author_notes`, `publication_short`, `draft`) and any text below the front
    matter, and refreshes `cite.bib`;
-4. deletes folders whose key is no longer in the library, but only if they
+4. recognises a paper that reappears under a new citation key (same DOI, or
+   same title when there is no DOI): the folder is renamed, so images, the
+   `featured` flag and any text move along, and links to it from other pages
+   (`{{< ref "../publication/<key>" >}}` in projects and posts) are rewritten;
+5. deletes folders whose key is no longer in the library, but only if they
    contain nothing but `index.md` and `cite.bib`; a folder with an image or
-   PDF is kept and listed in the PR as "kept although not in Zotero" (usually
-   the citation key changed: move the image to the new folder, delete the old).
+   PDF is kept and listed in the PR as "kept although not in Zotero". Pages
+   that still link to a removed publication are named in the PR; Hugo treats
+   such a link as a build error, so fix it (or add the paper back to Zotero);
+6. replaces group members' names by their profile identifier (`Harald G. L.
+   Schwefel`, `H. G. L. Schwefel`, `Harald Schwefel` → `harald-g.-l.-schwefel`)
+   when exactly one profile has that last name and a compatible first name
+   (`first_name`/`last_name` fields of the profile); the site then shows the
+   profile's title and links to it, whatever Zotero's spelling. Non-members
+   keep the spelling Zotero has, so fix those in Zotero;
+7. reports two Zotero items with the same DOI as possible duplicates.
 
 Safety: if the library returns fewer than 80 % of the folders the site has,
 the script refuses (exit 2) instead of deleting; pass `--allow-shrink` if the

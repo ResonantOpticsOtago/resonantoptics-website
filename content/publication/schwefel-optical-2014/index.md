@@ -1,7 +1,7 @@
 ---
 title: In optical pumping, less can be more
 authors:
-- Harald G. L. Schwefel
+- harald-g.-l.-schwefel
 date: '2014-10-01'
 publication_types:
 - article-journal

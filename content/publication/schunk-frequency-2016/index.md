@@ -1,15 +1,15 @@
 ---
 title: Frequency tuning of single photons from a whispering-gallery mode resonator to MHz-wide transitions
 authors:
-- Gerhard Schunk
-- Ulrich Vogl
-- Florian Sedlmeir
-- Dmitry V. Strekalov
-- Alexander Otterpohl
+- G. Schunk
+- U. Vogl
+- florian-sedlmeir
+- D. V. Strekalov
+- A. Otterpohl
 - V. Averchenko
-- Harald G. L. Schwefel
-- Gerd Leuchs
-- Christoph Marquardt
+- harald-g.-l.-schwefel
+- G. Leuchs
+- Ch Marquardt
 date: '2016-03-01'
 publication_types:
 - article-journal

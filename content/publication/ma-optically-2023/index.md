@@ -2,9 +2,9 @@
 title: Optically detected magnetic resonance to characterize atomlike microwave-optical transducers
 authors:
 - Li Ma
-- Luke S. Trainor
+- luke-s.-trainor
 - Gavin G. G. King
-- Harald G. L. Schwefel
+- harald-g.-l.-schwefel
 - Jevon J. Longdell
 date: '2023-05-01'
 publication_types:

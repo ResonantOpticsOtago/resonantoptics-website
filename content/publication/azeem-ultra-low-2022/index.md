@@ -1,12 +1,12 @@
 ---
 title: Ultra-Low Threshold Titanium-Doped Sapphire Whispering-Gallery Laser
 authors:
-- Farhan Azeem
-- Luke S. Trainor
+- farhan-azeem
+- luke-s.-trainor
 - Ang Gao
-- Maya Isarov
+- maya-isarov
 - Dmitry V. Strekalov
-- Harald G. L. Schwefel
+- harald-g.-l.-schwefel
 date: '2022-01-01'
 publication_types:
 - article-journal
