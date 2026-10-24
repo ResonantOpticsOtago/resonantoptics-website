@@ -200,10 +200,24 @@ def hugo_urlize(s: str) -> str:
 
 
 def load_profiles() -> list[tuple[str, str, list[str]]]:
-    """Group members from content/authors: (folder slug, last name, given-name tokens).
-    The slug is the stable identifier used in `authors:` lists; the display name
-    comes from the profile, so folder names are free."""
+    """Group members: (identifier, last name, given-name tokens).
+    Read from data/authors/<id>.yaml (HugoBlox Kit); falls back to the older
+    content/authors/<id>/_index.md layout. The identifier is what `authors:`
+    lists contain; the display name comes from the profile, so file names are free."""
     out = []
+    data_dir = ROOT / "data" / "authors"
+    if data_dir.is_dir() and any(data_dir.glob("*.y*ml")):
+        for f in sorted(list(data_dir.glob("*.yaml")) + list(data_dir.glob("*.yml"))):
+            d = yaml.safe_load(f.read_text(encoding="utf-8")) or {}
+            name = d.get("name") if isinstance(d.get("name"), dict) else {}
+            display = " ".join(str(name.get("display") or "").split())
+            last = str(name.get("family") or "").strip() or (display.split()[-1] if display else "")
+            first = str(name.get("given") or "").strip()
+            if not last:
+                continue
+            given = first.split() if first else (display[: len(display) - len(last)].split() if display.lower().endswith(last.lower()) else [])
+            out.append((f.stem, last, given))
+        return out
     authors_dir = ROOT / "content" / "authors"
     if not authors_dir.is_dir():
         return out

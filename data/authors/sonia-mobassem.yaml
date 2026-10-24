@@ -1,0 +1,18 @@
+schema: hugoblox/author/v1
+slug: sonia-mobassem
+name:
+  display: Sonia Mobassem
+  given: Sonia
+  family: Mobassem
+role: PhD Student
+bio: Sonia Mobassem is a PhD Student in the Physics Department of the University of Otago. Her research interests are in the use of optical resonators.
+affiliations:
+- name: Department of Physics, University of Otago
+links: []
+interests:
+- Resonant Optics
+- High Quality Optical Resonators
+- Nonlinear Optics
+education: []
+user_groups:
+- Alumni

@@ -21,3 +21,10 @@ node_modules/
 # OS noise
 .DS_Store
 Thumbs.db
+
+# Node packages (Tailwind, Pagefind) are installed at build time
+node_modules/
+package-lock.json.bak
+
+# Python virtual environment for the scripts
+.venv/

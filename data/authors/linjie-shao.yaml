@@ -1,0 +1,20 @@
+schema: hugoblox/author/v1
+slug: linjie-shao
+name:
+  display: Linjie Shao
+  given: Linjie
+  family: Shao
+role: PhD Student
+bio: Linjie Shao is a PhD Student in the Physics Department of the University of Otago. His research interests are in the use of optical resonators.
+affiliations:
+- name: Department of Physics, University of Otago
+links: []
+interests:
+- Resonant Optics
+- Quantum transduction & THz
+education:
+- degree: MSc in Optics Engineering
+  institution: Capital Normal University, China
+  end: '2024-12-31'
+user_groups:
+- PhD Students

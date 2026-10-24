@@ -1,0 +1,20 @@
+schema: hugoblox/author/v1
+slug: james-luxon
+name:
+  display: James Luxon
+  given: James
+  family: Luxon
+role: PhD Students
+bio: James Luxon is an Honours Student in the Physics Department of the University of Otago. His research interests are in THz and high quality optical resonators.
+affiliations:
+- name: Department of Physics, University of Otago
+links: []
+interests:
+- Resonant Optics
+- THz Resonators
+education:
+- degree: BSc Physics
+  institution: University of Otago
+  end: '2024-12-31'
+user_groups:
+- PhD Students

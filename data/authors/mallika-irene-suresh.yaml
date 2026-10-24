@@ -1,0 +1,24 @@
+schema: hugoblox/author/v1
+slug: mallika-irene-suresh
+name:
+  display: Mallika Suresh
+  given: Mallika
+  family: Suresh
+role: Agnes Blackie Fellow
+bio: "Mallika Suresh is a post-doctoral researcher in the Physics Department of the University of Otago and in the Dodd-Walls Centre for Photonic and Quantum Technologies. She got her Ph.D. from the Max Planck Institute for the Science of Light in Erlangen, Germany under the supervision of Prof. Philip Russell, where she investigated nonlinear optical effects occurring when femtosecond pulses of light propagate in gas-filled photonic crystal fibres. Since her Ph.D., she joint the University of Otago and has been working on nonlinear optical upconversion in high-quality optical microresonators. \n\nShe is currently working on the development of a photonic radiometer for the detection of atmospheric ozone by upconverting the faint microwave emission from ozone into the optical domain for measurement. In 2023, she was awarded the **Agnes-Blackie Research Fellowship** of the [Te Whai Ao -- Dodd-Walls Centre for Photonic and Quantum Technologies](https://www.doddwalls.ac.nz), which allows her to further her career as an independent researcher as she combines her expertise with femtosecond lasers with an application in fabricating photonic devices like the upconversion-based radiometer. The fellowship also allows supports her interest in public outreach as she enjoys explaining concepts of her research to the children and other members of the public."
+affiliations:
+- name: Department of Physics, University of Otago
+links:
+- icon: at-symbol
+  url: mailto:mallika.suresh@otago.ac.nz
+- icon: academicons/google-scholar
+  url: https://scholar.google.com/citations?user=etDRAYQAAAAJ&hl=en
+interests:
+- Resonant Optics
+- Nonlinear Optics
+education:
+- degree: PhD
+  institution: University of Erlangen-Nürenberg, Germany
+  end: '2021-12-31'
+user_groups:
+- Researchers

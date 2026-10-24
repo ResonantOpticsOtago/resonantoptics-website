@@ -1,0 +1,26 @@
+schema: hugoblox/author/v1
+slug: nicholas-j.-lambert
+name:
+  display: Nicholas J. Lambert
+  given: Nicholas
+  family: Lambert
+role: Research Fellow
+bio: Nick Lambert is a Research Fellow in the Physics Department of the University of Otago. His research has focused on the interaction of microwave photons with other things, including superconducting devices, semiconductor quantum dots, magnons, and optical frequency photons. Currently he interested in exploiting non-Hermitian physics for coherent control of magnonic hybrid systems, and using electro-optic whispering gallery mode resonators for quantum transduction and frequency combs.
+affiliations:
+- name: Department of Physics, University of Otago
+links:
+- icon: at-symbol
+  url: mailto:nicholas.lambert@otago.ac.nz
+- icon: academicons/google-scholar
+  url: https://scholar.google.co.uk/citations?user=2xax8icAAAAJ
+interests:
+- Microwave to optical quantum transduction
+- Frequency comb generation
+- Magnonic hybrid systems
+- Non-Hermitian physics
+education:
+- degree: PhD
+  institution: University of Bath
+  end: '2007-12-31'
+user_groups:
+- Researchers

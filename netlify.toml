@@ -1,24 +1,25 @@
-# Netlify builds the `draft` branch as a preview. It never publishes to the
-# university server. Build settings:
+# Netlify builds the `draft` branch (and, during the migration, the `kit`
+# branch) as a preview. It never publishes to the university server.
 #   - Hugo version: must equal .hugo-version (the CI build check verifies this)
+#   - Node is needed for Tailwind CSS and the Pagefind search index
 #   - HUGO_ENVIRONMENT=preview loads config/preview/ on top of config/_default/
-#     (edit links on posts, no analytics); the published site uses "production".
-#   - Do not enable HUGO_ENABLEGITINFO here: Netlify clones shallowly, so every
-#     page would show "Last updated on <date of the latest commit>".
+#     (edit links on posts); the published site uses "production"
+#   - Do not enable HUGO_ENABLEGITINFO here (shallow clones date every page today)
 
 [build]
-  command = "hugo --gc --minify -b $URL"
+  command = "npm ci --no-audit --no-fund && hugo --gc --minify -b $URL && npx pagefind --site public"
   publish = "public"
 
 [build.environment]
   HUGO_VERSION = "0.164.0"   # keep identical to .hugo-version (CI checks this)
   HUGO_ENVIRONMENT = "preview"
+  NODE_VERSION = "22"
 
 [context.deploy-preview]
-  command = "hugo --gc --minify --buildFuture -b $DEPLOY_PRIME_URL"
+  command = "npm ci --no-audit --no-fund && hugo --gc --minify --buildFuture -b $DEPLOY_PRIME_URL && npx pagefind --site public"
 
 [context.branch-deploy]
-  command = "hugo --gc --minify -b $DEPLOY_PRIME_URL"
+  command = "npm ci --no-audit --no-fund && hugo --gc --minify -b $DEPLOY_PRIME_URL && npx pagefind --site public"
 
 [[plugins]]
   package = "netlify-plugin-hugo-cache-resources"

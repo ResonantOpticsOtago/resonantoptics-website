@@ -1,100 +1,55 @@
 ---
 title: Tour
 date: 2022-10-24
-
 type: landing
 
+# A visual tour through the group's projects.
 sections:
-  - block: slider
+  - block: hero
     content:
-      slides:
-      - title: |
-          👋 Welcome to the group
-        content: Take a look at what we're working on...
-        align: center
-        background:
-          image:
-            filename: Group2025.jpg
-            filters:
-              brightness: 0.7
-          position: right
-          color: '#666'
-        link:
-          icon: graduation-cap
-          icon_pack: fas
-          text: Join Us
-          url: ../contact/
-      - title: PhotonicRadiometers
-        content: 'Quantum Technology inspired Photonic Radiometers for Climate Gas monitoring'
-        align: left
-        background:
-          image:
-            filename: CubeSat.png
-            filters:
-              brightness: 0.7
-          position: center
-          color: '#333'
-        link:
-          text: more
-          url: ../projects/photonic-radiometers
-      - title: Optical Frequency combs
-        content: 'Exploring electro-optic and Kerr nonlinearity based optical frequency combs'
-        align: right
-        background:
-          image:
-            filename: OpticalFrequencyCombs.png
-            filters:
-              brightness: 0.7
-          position: center
-          color: '#333'
-        link:
-          text: more
-          url: ../projects/optical-frequency-combs
-      - title: non-Hermitian Physics and Magnons
-        content: 'We investigate control of Magnon-Polaritons through non-Hermitian Physics.'
-        align: left
-        background:
-          image:
-            filename: Exceptional.png
-            filters:
-              brightness: 0.8
-          position: center
-          color: '#555'
-        link:
-          url: '../projects/Magnon-Polaritons'
-          text: Here for more
-      - title: Nonlinear Quantum Optics
-        content: 'Including microwave to optical transduction, entagled photons and parametric down conversion'
-        align: left
-        background:
-          image:
-            filename: PhotoMontage.png
-            filters:
-              brightness: 0.7
-          position: center
-          color: '#333'
-        link:
-          text: more
-          url: ../projects/nonlinear-and-quantum-optics
-      - title: THz resonators
-        content: 'Exploring high quality resonators in the THz domain'
-        align: right
-        background:
-          image:
-            filename: THzPhotonicMolecules.jpg
-            filters:
-              brightness: 0.7
-          position: center
-          color: '#333'
-        link:
-          text: more
-          url: ../projects/THzDomain
+      eyebrow: Resonant Optics
+      title: 👋 Welcome to the group
+      text: Take a look at what we're working on…
+      media:
+        src: Group2025.jpg
+        alt: The Resonant Optics group in 2025
+      primary_action:
+        text: Join us
+        url: /contact/
+        icon: hero/academic-cap
+      secondary_action:
+        text: Our projects
+        url: /projects/
     design:
-      # Slide height is automatic unless you force a specific height (e.g. '400px')
-      slide_height: ''
-      is_fullscreen: true
-      # Automatically transition through slides?
-      loop: false
-      # Duration of transition between slides (in ms)
-      interval: 2000
+      alignment: center
+      size: large
+  - block: gallery
+    content:
+      title: Our projects
+      items:
+        - src: CubeSat.png
+          title: Photonic Radiometers
+          caption: Quantum-technology-inspired photonic radiometers for climate gas monitoring
+          link: /projects/photonic-radiometers/
+        - src: OpticalFrequencyCombs.png
+          title: Optical Frequency Combs
+          caption: Exploring electro-optic and Kerr-nonlinearity based optical frequency combs
+          link: /projects/optical-frequency-combs/
+        - src: Exceptional.png
+          title: Non-Hermitian physics and magnons
+          caption: Exceptional points in coupled magnon–photon systems
+          link: /projects/magnon-polaritons/
+        - src: PhotoMontage.png
+          title: Nonlinear Quantum Optics
+          caption: Resonantly enhanced nonlinear and quantum optics
+          link: /projects/nonlinear-and-quantum-optics/
+        - src: THzPhotonicMolecules.jpg
+          title: THz resonators
+          caption: Resonators for the terahertz domain
+          link: /projects/thzdomain/
+    design:
+      layout: masonry
+      columns: 3
+      lightbox: true
+      caption_position: overlay
 ---

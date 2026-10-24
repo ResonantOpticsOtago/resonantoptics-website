@@ -1,0 +1,28 @@
+schema: hugoblox/author/v1
+slug: luke-s.-trainor
+name:
+  display: Luke S. Trainor
+  given: Luke
+  family: Trainor
+role: Postdoctoral Fellow
+bio: Luke Trainor was a PhD Student in the Physics Department of the University of Otago. His research interests are in the use of optical resonators. He is now working in the [Quantum Optics group](https://quantumoptics.physics.otago.ac.nz) of A/Prof Jevon Longdell in the Physics Department.
+affiliations:
+- name: University of Erlangen-Nürnberg, Germany
+links:
+- icon: at-symbol
+  url: mailto:luke.trainor@otago.ac.nz
+- icon: academicons/google-scholar
+  url: https://scholar.google.co.nz/citations?user=VqRmHFMAAAAJ&hl=en
+interests:
+- Resonant Optics
+- Microwave transduction
+- Electro-optic Frequency Combs
+education:
+- degree: Honours
+  institution: Otago University
+  end: '2017-12-31'
+- degree: PhD
+  institution: Otago University
+  end: '2021-12-31'
+user_groups:
+- Alumni

@@ -1,0 +1,21 @@
+{
+  "name": "resonantoptics-website",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Resonant Optics group website (Hugo + HugoBlox Kit, Tailwind CSS v4)",
+  "scripts": {
+    "dev": "hugo server --disableFastRender",
+    "build": "hugo --gc --minify && npm run pagefind",
+    "pagefind": "pagefind --site public"
+  },
+  "dependencies": {
+    "@tailwindcss/cli": "4.1.12",
+    "@tailwindcss/typography": "0.5.16",
+    "pagefind": "1.4.0",
+    "preact": "10.27.2",
+    "tailwindcss": "4.1.12"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

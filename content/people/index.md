@@ -1,27 +1,27 @@
 ---
 title: People
-date: 2024-06-24
-
+date: 2024-04-24
 type: landing
 
 sections:
-  - block: people
+  - block: team-showcase
     content:
-      title: Meet the Team
-      # Choose which groups/teams of users to display.
-      #   Edit `user_groups` in each user's profile to add them to one or more of these groups.
+      title: Our Team
+      text: ''
       user_groups:
-          - Principal Investigators
-          - Researchers
-          - PhD Students
-          - MSc Students
-          - Honours Students
-          - Visitors
-          - Alumni
-      sort_by: Params.last_name
+        - Principal Investigators
+        - Researchers
+        - PhD Students
+        - Visitors
+        - Alumni
+      sort_by: name_family
       sort_ascending: true
     design:
-      show_interests: false
       show_role: true
+      show_organizations: false
+      show_interests: true
+      max_interests: 3
       show_social: true
+      max_columns: 4
+      align: center
 ---

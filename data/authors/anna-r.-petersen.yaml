@@ -1,0 +1,23 @@
+schema: hugoblox/author/v1
+slug: anna-r.-petersen
+name:
+  display: Anna Petersen
+  given: Anna
+  family: Petersen
+role: Honours Student
+bio: Anna Petersen was an Honours Student in the Physics Department of the University of Otago. Her research interests are in THz and high quality optical resonators. She also worked as a summer student in the lab and is now working on an Applied Math MSc.
+affiliations:
+- name: Department of Physics, University of Otago
+links: []
+interests:
+- Resonant Optics
+- THz Resonators
+education:
+- degree: BSc Physics
+  institution: University of Otago
+  end: '2023-12-31'
+- degree: Honours Physics
+  institution: University of Otago
+  end: '2024-12-31'
+user_groups:
+- Alumni

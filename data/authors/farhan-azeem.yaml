@@ -1,0 +1,24 @@
+schema: hugoblox/author/v1
+slug: farhan-azeem
+name:
+  display: Farhan Azeem
+  given: Farhan
+  family: Azeem
+role: Research Consultant
+bio: Farhan Azeem was a PhD Student in the Physics Department of the University of Otago. His research interests are in the use of optical resonators for lasing. He is now a Photonics Engineer at Southern Photonics.
+affiliations:
+- name: Department of Physics, University of Otago
+links:
+- icon: academicons/google-scholar
+  url: https://scholar.google.com/citations?hl=en&user=Kh6v5zwAAAAJ
+interests:
+- Resonant Optics
+- High Quality Optical Resonators
+- Nonlinear Optics
+education:
+- degree: PhD Physics
+  institution: University of Otago
+  end: '2023-12-31'
+user_groups:
+- Alumni
+- Visitors

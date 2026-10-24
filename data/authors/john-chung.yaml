@@ -1,0 +1,23 @@
+schema: hugoblox/author/v1
+slug: john-chung
+name:
+  display: Yeonwook (John) Chung
+  given: Yeonwook
+  family: Chung
+role: MSc Student
+bio: Yeonwook (John) Chung was a MSc Student in the Physics Department of the University of Otago. His research interests are in the use of optical resonators.
+affiliations:
+- name: Department of Physics, University of Otago
+links: []
+interests:
+- Resonant Optics
+- WGM stabilized lasers
+education:
+- degree: Honours
+  institution: University of Otago
+  end: '2018-12-31'
+- degree: MSc
+  institution: University of Otago
+  end: '2020-12-31'
+user_groups:
+- Alumni

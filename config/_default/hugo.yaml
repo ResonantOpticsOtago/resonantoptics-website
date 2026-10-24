@@ -1,11 +1,8 @@
-# Configuration of Hugo
-# Guide: https://docs.hugoblox.com/tutorial/
-# Hugo Documentation: https://gohugo.io/getting-started/configuration/#all-configuration-settings
-# This file is formatted using YAML syntax - learn more at https://learnxinyminutes.com/docs/yaml/
+# Hugo configuration (site-wide). Theme settings live in params.yaml.
+# Hugo docs: https://gohugo.io/getting-started/configuration/
 
-title: Resonant Optics # Website name
-# baseURL: 'https://www.wgmr.eu/' # Website URL
-baseURL: 'https://resonantoptics.physics.otago.ac.nz/' # Website URL
+title: Resonant Optics
+baseURL: 'https://resonantoptics.physics.otago.ac.nz/'
 
 ############################
 ## LANGUAGE
@@ -17,9 +14,31 @@ defaultContentLanguageInSubdir: false
 removePathAccents: true
 
 ############################
+## URLS - kept identical to the pre-2026 site so no published link breaks
+############################
+
+permalinks:
+  # authors: the Kit links profiles as /authors/<id>/ (fixed in the theme); old /author/<id>/ URLs redirect via aliases
+  tags: '/tag/:slug/'
+  categories: '/category/:slug/'
+  publication_types: '/publication-type/:slug/'
+
+taxonomies:
+  author: authors
+  tag: tags
+  category: categories
+  publication_type: publication_types
+
+# The university server has no _redirects support, so Hugo writes HTML
+# redirects for `aliases:` (old profile URLs).
+disableAliases: false
+
+############################
 ## ADVANCED
 ############################
 
+build:
+  writeStats: true
 enableGitInfo: false
 summaryLength: 30
 pagination:
@@ -27,37 +46,20 @@ pagination:
 enableEmoji: true
 enableRobotsTXT: true
 footnotereturnlinkcontents: <sup>^</sup>
-ignoreFiles: [\.ipynb$, .ipynb_checkpoints$, \.Rmd$, \.Rmarkdown$, _cache$]
-permalinks:
-  authors: '/author/:slug/'
-  tags: '/tag/:slug/'
-  categories: '/category/:slug/'
-  publication_types: '/publication-type/:slug/'
-disableAliases: true
+ignoreFiles: [".ipynb_checkpoints$", "\\.Rmd$", "\\.Rmarkdown$", "_cache$"]
 outputs:
-  home: [HTML, RSS, JSON, WebAppManifest, headers, redirects]
+  home: [HTML, RSS]
   section: [HTML, RSS]
 imaging:
   resampleFilter: lanczos
-  quality: 75
+  quality: 90
   anchor: smart
+  hint: picture
 timeout: 600000
-taxonomies:
-  tag: tags
-  category: categories
-  publication_type: publication_types
-  author: authors
 markup:
   _merge: deep
-related:
-  threshold: 80
-  includeNewer: true
-  toLower: true
-  indices:
-    - name: tags
-      weight: 100
-    - name: categories
-      weight: 70
+  highlight:
+    lineNos: false
 security:
   _merge: deep
 sitemap:

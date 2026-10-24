@@ -1,0 +1,7 @@
+build:
+  hugo_version: '0.164.0'   # keep identical to .hugo-version
+deploy:
+  host: 'none'              # published by hand to the university web server
+template:
+  id: "research-group"
+  name: "Resonant Optics"

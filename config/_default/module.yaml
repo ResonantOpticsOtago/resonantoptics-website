@@ -1,10 +1,8 @@
 ############################
 ## HUGO MODULES
-## Install or uninstall themes and plugins here.
-## Docs: https://gohugo.io/hugo-modules/
+## The HugoBlox Kit theme is a Hugo Module: nothing of it is copied into this
+## repository. Versions are pinned in go.mod / go.sum.
 ############################
 
 imports:
-  - path: github.com/HugoBlox/hugo-blox-builder/modules/blox-plugin-decap-cms
-  - path: github.com/HugoBlox/hugo-blox-builder/modules/blox-plugin-netlify
-  - path: github.com/HugoBlox/hugo-blox-builder/modules/blox-bootstrap/v5
+  - path: github.com/HugoBlox/kit/modules/blox

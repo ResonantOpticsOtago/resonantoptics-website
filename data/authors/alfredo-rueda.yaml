@@ -1,0 +1,23 @@
+schema: hugoblox/author/v1
+slug: alfredo-rueda
+name:
+  display: Alfredo Rueda
+  given: Alfredo
+  family: Rueda
+role: PhD Student
+bio: Alfredo Rueda was a PhD Student at the Max Planck Institute for the Science of Light in Germany. Subsequently he spend time as a Research Assistant and Postdoc at the IST in Austria in the [Group of Prof. Johannes Fink](https://quantumids.com/) and at the University of Otago. He is now in industry.
+affiliations:
+- name: University of Erlangen-Nürnberg, Germany
+links:
+- icon: academicons/google-scholar
+  url: https://scholar.google.de/citations?user=o1infRoAAAAJ&hl=en
+interests:
+- Resonant Optics
+- Microwave transduction
+- Electro-optic Frequency Combs
+education:
+- degree: PhD
+  institution: University of Erlangen-Nürnberg, Germany
+  end: '2018-12-31'
+user_groups:
+- Alumni

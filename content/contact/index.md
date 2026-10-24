@@ -1,69 +1,42 @@
 ---
 title: Contact
 date: 2024-06-24
-
 type: landing
 
 sections:
-  - block: contact
+  - block: contact-info
     content:
       title: Contact
-      text: |-
-        We are located on the South Island of New Zealand in the state of Otago and the city of Dunedin.
-      email: harald.schwefel@otago.ac.nz
-      phone: +64 3 479 7754
+      subtitle: We are located on the South Island of New Zealand, in Dunedin, Otago.
+      visit_title: Visit us
+      connect_title: Get in touch
       address:
-        street: 730 Cumberland Street
-        city: Dunedin
-        region: 
-        postcode: '9016'
-        country: New Zealand
-        country_code: NZ
-      coordinates:
-        latitude: '-45.86385'
-        longitude: '170.51351'
-      directions: Science III Building, Physics reception on first floor
-#      office_hours:
-#        - 'Monday 10:00 to 13:00'
-#        - 'Wednesday 09:00 to 10:00'
-#      appointment_url: 'https://calendly.com'
-      #contact_links:
-      #  - icon: comments
-      #    icon_pack: fas
-      #    name: Discuss on Forum
-      #    link: 'https://discourse.gohugo.io'
-    
-      # Automatically link email and phone or display as text?
-      autolink: true
-    
-      # Email form provider
-#      form:
-#        provider: netlify
-#        formspree:
-#          id:
-#        netlify:
-          # Enable CAPTCHA challenge to reduce spam?
-#          captcha: false
-    design:
-      columns: '2'
-
-  - block: markdown
+        lines:
+          - Resonant Optics group
+          - Department of Physics, University of Otago
+          - Science III Building, Physics reception on the first floor
+          - 730 Cumberland Street
+          - Dunedin 9016
+          - New Zealand
+      email: harald.schwefel@otago.ac.nz
+      phone: "+64 3 479 7754"
+      map_url: https://www.google.com/maps?q=-45.86385,170.51351
+      show_form: false
+  - block: map
     content:
-      title:
-      subtitle: ''
-      text:
+      title: ''
+      location:
+        lat: -45.86385
+        lng: 170.51351
+      zoom: 15
+      markers:
+        - lat: -45.86385
+          lng: 170.51351
+          title: Department of Physics, University of Otago
+      cta:
+        directions:
+          text: Directions
     design:
-      columns: '1'
-      background:
-        image: 
-          filename: 
-          filters:
-            brightness: 1
-          parallax: false
-          position: center
-          size: cover
-          text_color_light: true
-      spacing:
-        padding: ['20px', '0', '20px', '0']
-      css_class: fullscreen
+      height: 420
+      interactive: true
 ---

@@ -1,0 +1,17 @@
+schema: hugoblox/author/v1
+slug: maya-isarov
+name:
+  display: Maya Isarov
+  given: Maya
+  family: Isarov
+role: Postdoctoral Fellow
+bio: Maya Isarov was a Postdoctoral Researcher in the Physics Department of the University of Otago. Her research interests are in the use of optical resonators.
+affiliations:
+- name: Department of Physics, University of Otago
+links: []
+interests:
+- Resonant Optics
+- Nonlinar Optics
+education: []
+user_groups:
+- Alumni

@@ -20,7 +20,7 @@ links:
 featured: true
 ---
 
-This is work with our collaborators, the group of Johannes Fink in Austria, who managed to cool down our joint microcavity design (2016) {{< cite page="/publication/rueda-efficient-2016/" view="1" >}} 
+This is work with our collaborators, the group of Johannes Fink in Austria, who managed to cool down our joint microcavity design (2016) {{< cite page="/publication/rueda-efficient-2016/" view="citation" >}} 
 within a dilution fridge.
 
 

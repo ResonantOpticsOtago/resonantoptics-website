@@ -1,122 +1,89 @@
-# SITE SETUP
-# Guide: https://docs.hugoblox.com/tutorial/
-# Documentation: https://docs.hugoblox.com/
-# This file is formatted using YAML syntax - learn more at https://learnxinyminutes.com/docs/yaml/
+# HugoBlox Kit site parameters (schema 2.0).
+# Reference: the Kit's templates, e.g. github.com/HugoBlox/kit/templates/academic-cv
 
-# Appearance
-
-appearance:
-  color: green
-  mode: dark
-  theme_day: minimal
-  theme_night: minimal
-  font: native
-  font_size: L
-  
-
-# SEO
-
-marketing:
-  seo:
-    site_type: Organization
-    local_business_type: 'ResearchOrganization'
-    org_name: 'University of Otago'
-    description: 'Resonant Optics research group in the Physics Department of the University of Otago.'
-    twitter: 
-  analytics:
-    google_analytics: ''
-    baidu_tongji: ''
-    google_tag_manager: ''
-    microsoft_clarity: ''
-  verification:
-    google: ''
-    baidu: ''
-
-# Site header
-
-header:
-  navbar:
+hugoblox:
+  schema: "2.0"
+  identity:
+    name: "Resonant Optics"
+    organization: "University of Otago"
+    type: organization
+    tagline: "Resonant Optics research group, Department of Physics, University of Otago"
+    description: "The Resonant Optics group at the University of Otago studies resonantly enhanced nonlinear optics with whispering-gallery-mode resonators: optical frequency combs, microwave-to-optical conversion and more."
+  theme:
+    mode: dark            # the previous site defaulted to dark; visitors can toggle
+    pack: "default"
+    colors:
+      primary: "green"    # Tailwind palette name or hex
+      secondary: ""
+      neutral: ""
+  typography:
+    pack: "academic"
+  layout:
+    radius: "md"
+    spacing: "spacious"
+    avatar_shape: circle
+  header:
     enable: true
-    align: r
-    show_logo: true
-    show_language: false
-    show_day_night: true
-    show_search: true
-    highlight_active_link: true
-
-# Site footer
-
-footer:
+    style: navbar
+    sticky: true
+    align: center
+    search: true
+    theme_toggle: true
+    theme_picker: false
+    language_switcher: false
+    cta:
+      enable: false
+  footer:
+    style: minimal
+    language_switcher: false
+    text: ""
   copyright:
-    notice: '© {year} Resonant Optics, University of Otago. This work is licensed under {license}'
+    notice: "© {year} Resonant Optics, University of Otago. This work is licensed under {license}"
     license:
-      enable: true
+      type: cc
       allow_derivatives: false
-      share_alike: true
+      share_alike: false
       allow_commercial: false
-
-# Localization
-
-locale:
-  date_format: 'Jan 2, 2006'
-  time_format: '3:04 PM'
-  address_format: en-us
-  Timezone: NZ
-
-# Site features
-
-features:
-  syntax_highlighter:
-    enable: false
-    extra_languages:
-      - r
-      - latex
-  math:
-    enable: true
-  privacy_pack:
-    enable: false
-  repository:
-    url: 'https://github.com/ResonantOpticsOtago/resonantoptics-website'
-    content_dir: content
-    branch: draft   # "Edit this page" links open the file on the draft branch
-  avatar:
-    gravatar: false
-    shape: circle
-  comment:
-    provider: ''
-    disqus:
-      shortname: ''
-      show_count: true
-    commento:
-      url: ''
-    giscus:
-      repo: ''
-      repo_id: ''
-      category: ''
-      category_id: ''
+  seo:
+    title: "Resonant Optics"
+    location:
+      address:
+        street: "730 Cumberland Street"
+        city: "Dunedin"
+        region: "Otago"
+        postal_code: "9016"
+        country: "New Zealand"
+      coordinates:
+        latitude: -45.86385
+        longitude: 170.51351
+      phone: "+64 3 479 7754"
+  content:
+    math:
+      enable: true
+    toc:
+      enable: false
+    reading_time:
+      enable: true
+    citations:
+      style: apa
   search:
-    provider: wowchemy
-    algolia:
-      app_id: ''
-      api_key: ''
-      index_name: ''
-      show_logo: false
-  map:
-    provider: 'mapnik'
-    api_key: ''
-    zoom: 15
-
-# Extensions
-
-extensions:
-  decap_cms:
-    branch: main
-    local_backend: false
-  academicons:
     enable: true
-
-# Citation style
-
-publications:
-  date_format: January 2006
-  citation_style: mla 
+  comments:
+    enable: false
+  analytics: {}
+  # "Edit this page" links: switched on only in the preview build (config/preview/)
+  repository:
+    enable: false
+    url: "https://github.com/ResonantOpticsOtago/resonantoptics-website"
+    branch: draft
+    content_dir: content
+  locale:
+    date_format: "Jan 2, 2006"
+    time_format: "3:04 PM"
+    address_format: en-us
+  security:
+    frame_options: sameorigin
+  privacy:
+    enable: false
+  pro:
+    hide_attribution: false

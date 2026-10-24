@@ -1,20 +1,18 @@
 #!/usr/bin/env python3
-"""Validate the people profiles in content/authors/.
+"""Validate the people profiles in data/authors/.
 
-One folder per person: content/authors/<slug>/_index.md (+ avatar.jpg/png).
-The folder name is the person's stable identifier (used in `authors:` lists of
-posts and publications); the display name is the `title` and is independent.
-This script checks the things that silently break the People page or a
-profile page.  It is run by CI on every pull request and can be run locally:
+One file per person: data/authors/<identifier>.yaml (HugoBlox Kit schema
+`hugoblox/author/v1`) plus a square photo assets/media/authors/<identifier>.jpg
+(or .png/.jpeg/.webp). The identifier is stable and is what `authors:` lists in
+posts and publications contain; the display name is `name.display`.
 
-    python3 scripts/check_people.py            # from the repository root
+Run locally from the repository root (needs PyYAML):
+
+    python3 scripts/check_people.py
 
 Exit status 1 = at least one error (fix before merging); warnings never fail.
-A person may be in several groups (e.g. Alumni and Visitors); that is not flagged.
-Messages use the GitHub Actions annotation format so they show up inline
-on the "Files changed" tab of a pull request.
-
-Only dependency: PyYAML (pip install pyyaml).
+Messages use the GitHub Actions annotation format so they appear inline on
+the "Files changed" tab of a pull request.
 """
 
 from __future__ import annotations
@@ -30,22 +28,15 @@ except ImportError:  # pragma: no cover
     sys.exit("PyYAML is required: pip install pyyaml")
 
 ROOT = Path(__file__).resolve().parent.parent
-AUTHORS_DIR = ROOT / "content" / "authors"
+AUTHORS_DIR = ROOT / "data" / "authors"
+AVATAR_DIR = ROOT / "assets" / "media" / "authors"
 PEOPLE_PAGE = ROOT / "content" / "people" / "index.md"
-AVATAR_NAMES = ("avatar.jpg", "avatar.jpeg", "avatar.png", "avatar.webp")
+AVATAR_EXT = (".jpg", ".jpeg", ".png", ".webp")
 LINK_RE = re.compile(r"^(https?://|mailto:|#)")
+SLUG_RE = re.compile(r"^[a-z0-9][a-z0-9.\-]*$")
 
 errors = 0
 warnings = 0
-
-
-def hugo_urlize(s: str) -> str:
-    """Approximation of Hugo's urlize(), which turns an author name into its taxonomy slug."""
-    import unicodedata
-    s = unicodedata.normalize("NFC", s.strip().lower())
-    s = re.sub(r"\s+", "-", s)
-    s = "".join(c for c in s if c.isalnum() or c in ".-_/+~@#")
-    return re.sub(r"-{2,}", "-", s).strip("-")
 
 
 def report(level: str, path: Path, msg: str) -> None:
@@ -55,120 +46,111 @@ def report(level: str, path: Path, msg: str) -> None:
     else:
         warnings += 1
     rel = path.relative_to(ROOT) if path.is_relative_to(ROOT) else path
-    # ::error file=...::msg is understood by GitHub Actions; plain text elsewhere.
     if os.environ.get("GITHUB_ACTIONS"):
         print(f"::{level} file={rel}::{msg}")
     else:
         print(f"{level.upper():7} {rel}: {msg}")
 
 
-def front_matter(path: Path) -> dict | None:
+def front_matter(path: Path) -> dict:
     text = path.read_text(encoding="utf-8")
     if not text.startswith("---"):
-        report("error", path, "file does not start with a '---' YAML front matter block")
-        return None
-    parts = text.split("\n---", 2)
-    if len(parts) < 2:
-        report("error", path, "unterminated front matter (missing closing '---')")
-        return None
+        return {}
     try:
-        data = yaml.safe_load(parts[0][3:]) or {}
-    except yaml.YAMLError as exc:
-        report("error", path, f"front matter is not valid YAML: {exc}".replace("\n", " "))
-        return None
-    if not isinstance(data, dict):
-        report("error", path, "front matter must be a mapping of key: value")
-        return None
-    return data
+        data = yaml.safe_load(text.split("\n---", 2)[0][3:]) or {}
+    except yaml.YAMLError:
+        return {}
+    return data if isinstance(data, dict) else {}
 
 
 def allowed_groups() -> list[str]:
     """The groups shown on the People page, in display order."""
-    data = front_matter(PEOPLE_PAGE) or {}
-    for section in data.get("sections", []):
-        if section.get("block") == "people":
-            return list(section.get("content", {}).get("user_groups", []))
-    report("warning", PEOPLE_PAGE, "no 'people' block found; group names cannot be validated")
+    for section in front_matter(PEOPLE_PAGE).get("sections", []):
+        if section.get("block") == "team-showcase":
+            groups = []
+            for g in section.get("content", {}).get("user_groups", []):
+                groups.append(g["name"] if isinstance(g, dict) else str(g))
+            return groups
+    report("warning", PEOPLE_PAGE, "no 'team-showcase' block found; group names cannot be validated")
     return []
 
 
 def main() -> int:
     groups = allowed_groups()
-    seen_titles: dict[str, Path] = {}
+    seen_names: dict[str, Path] = {}
+    files = sorted(AUTHORS_DIR.glob("*.yaml")) + sorted(AUTHORS_DIR.glob("*.yml"))
+    if not files:
+        report("error", AUTHORS_DIR, "no profiles found")
+        return 1
 
-    folders = sorted(p for p in AUTHORS_DIR.iterdir() if p.is_dir())
-    for folder in folders:
-        index = folder / "_index.md"
-        if not index.exists():
-            report("error", folder, "missing _index.md")
+    for f in files:
+        slug = f.stem
+        try:
+            d = yaml.safe_load(f.read_text(encoding="utf-8")) or {}
+        except yaml.YAMLError as exc:
+            report("error", f, f"not valid YAML: {exc}".replace("\n", " "))
             continue
-        fm = front_matter(index)
-        if fm is None:
+        if not isinstance(d, dict):
+            report("error", f, "file must be a mapping of key: value")
             continue
-        slug = folder.name
 
         # --- identity -------------------------------------------------------
-        raw_title = str(fm.get("title") or "")
-        title = " ".join(raw_title.split())
-        if not title:
-            report("error", index, "'title' (display name) is missing")
-        elif raw_title != title:
-            report("warning", index, "'title' has leading/trailing/double spaces; remove them")
-        if title in seen_titles:
-            report("warning", index, f"same display name as {seen_titles[title].relative_to(ROOT)}")
+        if not SLUG_RE.match(slug):
+            report("error", f, "file name must be lower case letters, digits, dots and hyphens (it is the person's identifier)")
+        if str(d.get("slug") or "").strip() not in ("", slug):
+            report("error", f, f"'slug' is '{d.get('slug')}' but the file is '{slug}.yaml' (they must match)")
+        name = d.get("name") if isinstance(d.get("name"), dict) else {}
+        display = " ".join(str(name.get("display") or "").split())
+        if not display:
+            report("error", f, "'name.display' (the name as shown) is missing")
+        elif display in seen_names:
+            report("warning", f, f"same display name as {seen_names[display].relative_to(ROOT)}")
         else:
-            seen_titles[title] = index
-
-        authors = fm.get("authors")
-        if not isinstance(authors, list) or not authors:
-            report("error", index, "'authors' must be a list containing the folder name")
-        elif str(authors[0]).strip() != slug:
-            report(
-                "error",
-                index,
-                f"'authors' first entry is '{authors[0]}' but the folder is '{slug}' "
-                "(they must match, or posts and publications will not link to this profile)",
-            )
-
-        if not str(fm.get("last_name") or "").strip():
-            report("error", index, "'last_name' is missing (the People page sorts by it; publications are matched by it)")
-        if not str(fm.get("first_name") or "").strip():
-            report("warning", index, "'first_name' is missing (used to match this person's name on publications)")
-        if not str(fm.get("role") or "").strip():
-            report("warning", index, "'role' is empty (shown under the name on the People page)")
+            seen_names[display] = f
+        if not str(name.get("family") or "").strip():
+            report("error", f, "'name.family' (last name) is missing: the People page sorts by it and publications are matched by it")
+        if not str(name.get("given") or "").strip():
+            report("warning", f, "'name.given' (first name) is missing: used to match this person's name on publications")
+        if not str(d.get("role") or "").strip():
+            report("warning", f, "'role' is empty (shown under the name on the People page)")
 
         # --- groups ---------------------------------------------------------
-        ug = fm.get("user_groups")
-        if ug is None or ug == []:
-            report("warning", index, "no 'user_groups' - this person is not shown on the People page")
+        ug = d.get("user_groups")
+        if not ug:
+            report("warning", f, "no 'user_groups': this person is not shown on the People page")
         elif not isinstance(ug, list):
-            report("error", index, "'user_groups' must be a list, e.g.\n  user_groups:\n    - PhD Students")
+            report("error", f, "'user_groups' must be a list, e.g.\n  user_groups:\n    - PhD Students")
         else:
             for g in ug:
                 if groups and g not in groups:
-                    report(
-                        "error",
-                        index,
-                        f"user_group '{g}' is not one of the groups on the People page: {', '.join(groups)}",
-                    )
+                    report("error", f, f"user_group '{g}' is not one of the groups on the People page: {', '.join(groups)}")
             if len(ug) != len(set(ug)):
-                report("warning", index, "duplicate entries in 'user_groups'")
+                report("warning", f, "duplicate entries in 'user_groups'")
 
         # --- links ----------------------------------------------------------
-        for i, s in enumerate(fm.get("social") or []):
-            link = str((s or {}).get("link") or "")
-            if not LINK_RE.match(link):
-                report("error", index, f"social[{i}] link '{link}' must start with https://, http://, mailto: or #")
-        for i, org in enumerate(fm.get("organizations") or []):
+        for i, link in enumerate(d.get("links") or []):
+            url = str((link or {}).get("url") or "")
+            if not LINK_RE.match(url):
+                report("error", f, f"links[{i}] url '{url}' must start with https://, http://, mailto: or #")
+            if not str((link or {}).get("icon") or "").strip():
+                report("warning", f, f"links[{i}] has no icon")
+        for i, org in enumerate(d.get("affiliations") or []):
             url = str((org or {}).get("url") or "")
             if url and not LINK_RE.match(url):
-                report("error", index, f"organizations[{i}] url '{url}' must start with https:// or http://")
+                report("error", f, f"affiliations[{i}] url '{url}' must start with https:// or http://")
 
         # --- avatar ---------------------------------------------------------
-        if not any((folder / n).exists() for n in AVATAR_NAMES):
-            report("warning", index, "no avatar.jpg/png in the folder - a placeholder silhouette will be shown")
+        avatars = [AVATAR_DIR / f"{slug}{ext}" for ext in AVATAR_EXT if (AVATAR_DIR / f"{slug}{ext}").exists()]
+        if not avatars:
+            report("warning", f, f"no photo: add a square assets/media/authors/{slug}.jpg (a placeholder is shown)")
+        elif len(avatars) > 1:
+            report("warning", f, "more than one photo file for this identifier; keep one: " + ", ".join(a.name for a in avatars))
 
-    print(f"\nchecked {len(folders)} profiles: {errors} error(s), {warnings} warning(s)")
+    for a in AVATAR_DIR.glob("*"):
+        if a.suffix.lower() in AVATAR_EXT and not (AUTHORS_DIR / f"{a.stem}.yaml").exists():
+            report("warning", a, "photo has no matching profile in data/authors/")
+
+    print(f"\nchecked {len(files)} profiles: {errors} error(s), {warnings} warning(s)")
     return 1 if errors else 0
 
 

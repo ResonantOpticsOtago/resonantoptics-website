@@ -9,7 +9,7 @@
 # Settings come from publish.conf next to this repository's root
 # (copy publish.conf.example; the file is git-ignored because it contains the
 # server path).  Requires: git, hugo (extended, version in .hugo-version), rsync,
-# and an SSH login to the web server that works without typing a password
+# Node.js (npm), and an SSH login to the web server that works without typing a password
 # (ssh key or agent), otherwise rsync will prompt.
 set -euo pipefail
 cd "$(dirname "$0")/.."
@@ -69,8 +69,11 @@ if [ "$FORCE" -eq 0 ]; then
 fi
 
 # --- 3. Build ---------------------------------------------------------------
+command -v npm >/dev/null || { echo "Node.js/npm is required (Tailwind CSS and the search index): brew install node" >&2; exit 1; }
+npm ci --no-audit --no-fund
 rm -rf public
 HUGO_ENVIRONMENT=production hugo --gc --minify --baseURL "$BASE_URL"
+npx pagefind --site public
 pages="$(find public -name index.html | wc -l | tr -d ' ')"
 echo "Built $pages pages from commit $(git rev-parse --short HEAD)."
 

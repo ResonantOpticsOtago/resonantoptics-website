@@ -24,10 +24,10 @@ Non-linear optical phenomena require high electro-magnetic fields and highly non
 
 ## Coherent conversion between microwaves and optics
 One particularly challenging, but important topic is to bridge the microwave and optical domain, coherently. Microwave photons are the quantum bits in the superconducting microwave quantum circuits. They cannot however communicate to any other quantum system outside of the cryostat, unless they are converted into the optical domain. We have shown that this is possible in 2016. 
-{{< cite page="/publication/rueda-efficient-2016" view="1" >}}
+{{< cite page="/publication/rueda-efficient-2016" view="citation" >}}
 
 In 2020 we reviewed the topic in a front cover issue of *Advanced Quantum Technologies* 
-{{< cite page="/publication/lambert-coherent-2020" view="1" >}}
+{{< cite page="/publication/lambert-coherent-2020" view="citation" >}}
 {{< figure src="AQT-title.png" title="Title of Advanced Quantum Technologies, showing the key equation governing the process.">}}
 
 ## Google Award
@@ -41,5 +41,5 @@ We were awarded $50,000 USD for one year to push ahead on a new design that we b
 
 ## Fundamental quantum properties
 We are working together with the [QIV group at the MPL](https://www.mpl.mpg.de/divisions/leuchs-division/research/qiv-group/) on studying the quantum properties of the emitted light from parametrically down converted light in a lithium niobate WGM resonator. A green pump photon splits into two highly tunable infra red photons and allows for heralded single photons of a single mode (2015):
-{{< cite page="/publication/fortsch-highly-2015/" view="1" >}}  In order to determine the exact modal parameters we have devised a method to clearly identify each mode (2014):
-{{< cite page="/publication/schunk-identifying-2014/" view="1" >}} 
+{{< cite page="/publication/fortsch-highly-2015/" view="citation" >}}  In order to determine the exact modal parameters we have devised a method to clearly identify each mode (2014):
+{{< cite page="/publication/schunk-identifying-2014/" view="citation" >}} 

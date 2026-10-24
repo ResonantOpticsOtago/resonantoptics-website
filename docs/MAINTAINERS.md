@@ -1,5 +1,8 @@
 # Maintaining the Resonant Optics website
 
+> **Branch `kit`:** this site now runs on HugoBlox Kit. Profiles live in `data/authors/<identifier>.yaml` (photo in `assets/media/authors/`), not in `content/authors/`. See `docs/KIT-MIGRATION.md`; this guide is updated in Phase 2.
+
+
 This document is for whoever runs the machinery. Editors who only add news or
 edit their profile should read [EDITING.md](EDITING.md) instead.
 

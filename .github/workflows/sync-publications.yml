@@ -67,6 +67,13 @@ jobs:
         if: steps.changes.outputs.changed == 'true'
         uses: ./.github/actions/setup-hugo
 
+      - name: Set up Node (Tailwind CSS, Pagefind)
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+
       - name: Cache Hugo modules
         if: steps.changes.outputs.changed == 'true'
         uses: actions/cache@v4
@@ -85,6 +92,7 @@ jobs:
         run: |
           hugo --gc --minify --baseURL "$SITE_URL" 2>&1 | tee /tmp/build.log
           test "${PIPESTATUS[0]}" -eq 0
+          npx pagefind --site public
 
       - name: Record the build result in the PR text
         if: steps.changes.outputs.changed == 'true'

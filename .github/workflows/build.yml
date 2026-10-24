@@ -54,6 +54,13 @@ jobs:
       - name: Install Hugo ${{ steps.hugo.outputs.version }} (extended), checksum-verified
         uses: ./.github/actions/setup-hugo
 
+      - name: Set up Node (Tailwind CSS, Pagefind)
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+
       - name: Cache Hugo modules
         uses: actions/cache@v4
         with:
@@ -77,6 +84,7 @@ jobs:
         run: |
           hugo --gc --minify --baseURL "$SITE_URL" 2>&1 | tee build.log
           test "${PIPESTATUS[0]}" -eq 0
+          npx pagefind --site public
 
       - name: Summarise Hugo warnings
         if: always()

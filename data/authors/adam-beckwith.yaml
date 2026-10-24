@@ -1,0 +1,20 @@
+schema: hugoblox/author/v1
+slug: adam-beckwith
+name:
+  display: Adam Beckwith
+  given: Adam
+  family: Beckwith
+role: MSc Student
+bio: Adam Beckwith is a MSc Student in the Physics Department of the University of Otago. His research interests are in the use of microwave resonators.
+affiliations:
+- name: Department of Physics, University of Otago
+links: []
+interests:
+- Resonant Optics
+- Microwave Resonators
+education:
+- degree: Honours
+  institution: University of Otago
+  end: '2019-12-31'
+user_groups:
+- Alumni

@@ -1,0 +1,20 @@
+schema: hugoblox/author/v1
+slug: grace-yue
+name:
+  display: Grace Yue
+  given: Grace
+  family: Yue
+role: Honours Student
+bio: Grace Yue was an Honours Student in the Physics Department of the University of Otago. Her research interests are in high quality optical resonators.
+affiliations:
+- name: Department of Physics, University of Otago
+links: []
+interests:
+- Resonant Optics
+- THz Resonators
+education:
+- degree: Honours
+  institution: University of Otago
+  end: '2022-12-31'
+user_groups:
+- Alumni

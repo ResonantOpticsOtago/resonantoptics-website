@@ -1,5 +1,8 @@
 # Editing the Resonant Optics website
 
+> **Branch `kit`:** this site now runs on HugoBlox Kit. Profiles live in `data/authors/<identifier>.yaml` (photo in `assets/media/authors/`), not in `content/authors/`. See `docs/KIT-MIGRATION.md`; this guide is updated in Phase 2.
+
+
 Everything on the site is a text file in the GitHub repository
 <https://github.com/ResonantOpticsOtago/resonantoptics-website>. You edit the
 files in your browser; you do not need git or Hugo installed.

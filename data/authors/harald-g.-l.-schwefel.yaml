@@ -1,0 +1,39 @@
+schema: hugoblox/author/v1
+slug: harald-g.-l.-schwefel
+name:
+  display: Harald G. L. Schwefel
+  given: Harald
+  family: Schwefel
+role: Professor
+bio: Harald Schwefel is a Professor in the Physics Department of the University of Otago and Principle Investigator in the [Te Whai Ao -- Dodd-Walls Centre for Photonic and Quantum Technologies](https://www.doddwalls.ac.nz) and the Quantum Technologies Aotearoa (QTA). His research interests are in the use of optical resonators. Such high quality resonators are great to generate very high field intensities. With high fields the interaction of light with matter can show significant nonlinearities and light can interact with itself and new colours can be created. A side effect of these high quality resonators is that they are extremely sensitive to changes in the environment making them an ideal candidate to measure such changes.
+affiliations:
+- name: Department of Physics, University of Otago
+links:
+- icon: at-symbol
+  url: mailto:harald.schwefel@otago.ac.nz
+- icon: academicons/google-scholar
+  url: https://scholar.google.co.nz/citations?user=Ua-xeesAAAAJ
+interests:
+- Resonant Optics
+- Nonlinear Optics
+- Quantum Optics
+- UV, Visible, Microwave & THz
+education:
+- degree: Habilitation
+  institution: University of Erlangen-Nürnberg
+  end: '2014-12-31'
+- degree: PhD in Physics
+  institution: Yale University
+  end: '2004-12-31'
+- degree: MPhil in Physics
+  institution: Yale University
+  end: '2002-12-31'
+- degree: Vordiplom in Physics
+  institution: Brandenburg Technical University, Germany
+  end: '1998-12-31'
+- degree: Vordiplom in Mathematics
+  institution: Brandenburg Technical University, Germany
+  end: '1998-12-31'
+user_groups:
+- Principal Investigators
+is_owner: true

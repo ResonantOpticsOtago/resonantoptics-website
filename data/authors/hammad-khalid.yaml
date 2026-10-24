@@ -1,0 +1,20 @@
+schema: hugoblox/author/v1
+slug: hammad-khalid
+name:
+  display: Hammad Khalid
+  given: Hammad
+  family: Khalid
+role: PhD Student
+bio: Hammad Khalid is a PhD Student in the Physics Department of the University of Otago. His research interests are in the use of optical resonators.
+affiliations:
+- name: Department of Physics, University of Otago
+links: []
+interests:
+- Resonant Optics
+- RF power
+education:
+- degree: Master PICS (Photonics Micro-Nanotechnology Time Frequency and Metrology)
+  institution: Université Bourgogne Franche-Comté, France
+  end: '2023-12-31'
+user_groups:
+- PhD Students

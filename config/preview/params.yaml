@@ -1,0 +1,6 @@
+# PREVIEW ENVIRONMENT (Netlify builds of the draft/kit branches), loaded on top
+# of config/_default/ when HUGO_ENVIRONMENT=preview. "Edit this page" links on
+# news posts open the file in GitHub's web editor on the draft branch.
+hugoblox:
+  repository:
+    enable: true

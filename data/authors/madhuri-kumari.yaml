@@ -1,0 +1,20 @@
+schema: hugoblox/author/v1
+slug: madhuri-kumari
+name:
+  display: Madhuri Kumari
+  given: Madhuri
+  family: Kumari
+role: Postdoctoral Fellow
+bio: Madhuri Kumari was a Postdoctoral Researcher in the Physics Department of the University of Otago. Her research interests are in the use of optical resonators.
+affiliations:
+- name: Department of Physics, University of Otago
+links: []
+interests:
+- Resonant Optics
+- Nonlinear Optics
+education:
+- degree: PhD
+  institution: University of Otago
+  end: '2018-12-31'
+user_groups:
+- Alumni

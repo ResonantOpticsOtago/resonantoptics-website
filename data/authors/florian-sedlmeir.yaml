@@ -1,0 +1,25 @@
+schema: hugoblox/author/v1
+slug: florian-sedlmeir
+name:
+  display: Florian Sedlmeir
+  given: Florian
+  family: Sedlmeir
+role: Marie Skłodowska Curie Fellow
+bio: "Florian Sedlmeir was a PhD Student at the Max Planck Institute for the Science of Light in Germany. Subsequently he spend time as a Research Assistant at the University of Otago and as a Postdoc at the Max Planck Institute for the Science of Light in the QIV group. He then spend some time in industry to return to Otago in 2022. \n\nFlorian received the prestigous Marie Skłodowska Curie Fellowship in 2024 as well as a Marsden Fast-Start. He will spend the out-going phase of the Marie Skłodowska Curie Fellowship at Otago."
+affiliations:
+- name: Department of Physics, University of Otago
+- name: University Carlos III of Madrid (UC3M) in Madrid, Spain
+links:
+- icon: academicons/google-scholar
+  url: https://scholar.google.co.nz/citations?user=4QDtGVwAAAAJ
+interests:
+- Resonant Optics
+- High Quality Optical Resonators
+- Nonlinear Optics
+education:
+- degree: PhD Physics
+  institution: University of Erlangen-Nürnberg, Germany
+  end: '2017-12-31'
+user_groups:
+- Researchers
+- Alumni
