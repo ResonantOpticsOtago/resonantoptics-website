@@ -19,8 +19,9 @@ links:
   url: https://link.aps.org/doi/10.1103/PRXQuantum.1.020315
 featured: true
 ---
+<!-- cite views: "inline" = short "Journal (Year)" link (like the old site); "citation" = full APA reference; "card" = card with picture -->
 
-This is work with our collaborators, the group of Johannes Fink in Austria, who managed to cool down our joint microcavity design (2016) {{< cite page="/publication/rueda-efficient-2016/" view="citation" >}} 
+This is work with our collaborators, the group of Johannes Fink in Austria, who managed to cool down our joint microcavity design (2016) {{< cite page="/publication/rueda-efficient-2016/" view="inline" >}} 
 within a dilution fridge.
 
 

@@ -34,10 +34,15 @@ sections:
         enable: true
         text: All news
     design:
-      view: date-title-summary
-      columns: '2'
+      # Views with a picture: `card` (image on top of each card; the only view
+      # with images). Without picture: `date-title-summary` (compact list) or
+      # `article-grid` (title + summary in a grid). Try by changing `view`.
+      view: card
+      columns: 2                  # 1 | 2 | 3 cards per row
+      fill_image: true            # true: image fills the card top; false: image shown whole (letterboxed)
       show_date: true
       show_read_time: false
+      show_read_more: false
 
   - block: content-collection
     id: projects

@@ -46,6 +46,35 @@ profile pages (redirect); auto-generated pages of non-member co-authors moved
 from `/author/<name>/` to `/authors/<name>/` without redirects (180 pages,
 never linked from the site itself); tag/category pagination URLs.
 
+## Site-level additions (not theme overrides)
+
+The Kit allows a site to add its own blocks and views next to the theme's;
+nothing of the theme is copied or shadowed. Added here (all in `layouts/`):
+
+- `_partials/hbx/blocks/people/block.html` — compact people grid (small round
+  photos, name, role, optional interests/links), grouped by `user_groups`.
+  Options are documented in the file and in `content/people/index.md`.
+- `_partials/hbx/blocks/publication-list/block.html` — full publication list
+  with search box, filter buttons per publication type and a sort control;
+  entries are rendered with the Kit's own citation view.
+- `_partials/views/inline.html` — view for the `cite` shortcode: a short
+  "Journal (Year)" link, as the previous site had.
+
+They use five Kit helper partials (`functions/get_authors_data`,
+`functions/get_author_profile`, `functions/resolve_publication`,
+`functions/render_view`, `social_links`). If a Kit upgrade renames one, the
+build fails with a clear template error — fix the name in our file.
+
+Profile pages (`content/authors/<id>/_index.md`) are landing pages made of
+Kit blocks: `resume-biography-3` (photo, bio, interests, education, links)
+plus two `content-collection` blocks (the person's publications and news).
+The data stays in `data/authors/<id>.yaml`.
+
+Where a presentation has alternatives, the `.md` files carry them as comments
+(`content/_index.md`, `content/people/index.md`, `content/post/_index.md`,
+`content/publication/_index.md`, each profile page, and the projects using
+`cite`).
+
 ## Gaps and findings — please read
 
 1. **Look**: dark by default, green accent, "academic" typography (serif
@@ -54,24 +83,20 @@ never linked from the site itself); tag/category pagination URLs.
    Structure is the same; it is a different design system.
 2. **Tour**: no full-screen slider in the Kit. Now a hero with the 2025 group
    photo and a lightbox gallery of the five project images.
-3. **Profile pages** show photo, name, role, affiliation, bio, links and the
-   person's posts/publications. Interests and education are stored but not
-   shown on the profile page (only interests appear on the People page). If
-   you want them visible, add them to the bio text; overriding the theme's
-   template is the alternative I would avoid.
-4. **Kit bug with small images**: hero/gallery crash the build when an image
+3. **Kit bug with small images**: hero/gallery crash the build when an image
    is narrower than 480 px (no fallback in the theme's responsive-image
    helper). Two project images were 250 px: Nonlinear & Quantum Optics now
    uses `PhotoMontage.png`; the THz image was upscaled ×3 as a placeholder —
    please provide a real one (≥ 1200 px). Cards elsewhere tolerate small
    images; ~35 news posts have small `featured` images and rendered fine.
-5. **Deprecation warnings** for every publication (`doi` → `hugoblox.ids.doi`,
+4. **Deprecation warnings** for every publication (`doi` → `hugoblox.ids.doi`,
    flat `publication` → structured). The Kit still reads the old fields. Phase
    2: the sync writes the new shape, warnings disappear.
-6. **Documentation gap in the Kit**: the `logos` block README says `logos:`,
-   the current component wants `items:`. Expect more of this; the Kit is 0.x.
-7. **Edit this page** links work (preview build only, as before).
-8. **Math, search (Pagefind), RSS, sitemap, 404, citation view, `cite`
+5. **Documentation gaps in the Kit**: e.g. the `logos` block README says
+   `logos:`, the current component wants `items:`. Expect more of this; the
+   Kit is 0.x.
+6. **Edit this page** links work (preview build only, as before).
+7. **Math, search (Pagefind), RSS, sitemap, 404, citation view, `cite`
    shortcode, DOI/cite buttons, featured filter, reading time**: working.
 
 ## Phase 2 (after your go)

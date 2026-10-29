@@ -1,0 +1,100 @@
+{{/*
+  Custom block "people" (this site, not part of HugoBlox Kit): a compact
+  people grid in the style of the previous site - small round photo, name,
+  role, optional interests and social links, grouped by `user_groups`.
+  Profiles come from data/authors/<identifier>.yaml via the Kit's helpers.
+
+  content:
+    title, text            optional heading and intro (Markdown)
+    user_groups            list of group names, in display order
+    sort_by                name_family (default) | weight | graduation_year
+    sort_ascending         true (default) | false
+  design:
+    columns                3 | 4 | 5 (default) | 6   people per row on wide screens
+    avatar_size            photo diameter in px, default 112
+    show_role              true (default) | false
+    show_interests         false (default) | true  (first `max_interests`, default 3)
+    show_social            true (default) | false
+*/}}
+{{ $page := .wcPage }}
+{{ $block := .wcBlock }}
+{{ $content := $block.content | default dict }}
+{{ $design := $block.design | default dict }}
+
+{{ $columns := partial "functions/coerce_int" (dict "value" (index $design "columns") "default" 5 "min" 2 "max" 6) }}
+{{ $avatar_size := partial "functions/coerce_int" (dict "value" (index $design "avatar_size") "default" 112 "min" 48 "max" 320) }}
+{{ $show_role := partial "functions/coerce_bool" (dict "value" (index $design "show_role") "default" true) }}
+{{ $show_interests := partial "functions/coerce_bool" (dict "value" (index $design "show_interests") "default" false) }}
+{{ $max_interests := partial "functions/coerce_int" (dict "value" (index $design "max_interests") "default" 3 "min" 0 "max" 10) }}
+{{ $show_social := partial "functions/coerce_bool" (dict "value" (index $design "show_social") "default" true) }}
+{{ $sort_by := (index $content "sort_by") | default "name_family" }}
+{{ $sort_asc := partial "functions/coerce_bool" (dict "value" (index $content "sort_ascending") "default" true) }}
+
+{{ $grid := dict
+  "2" "grid gap-x-6 gap-y-10 grid-cols-2"
+  "3" "grid gap-x-6 gap-y-10 grid-cols-2 md:grid-cols-3"
+  "4" "grid gap-x-6 gap-y-10 grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+  "5" "grid gap-x-6 gap-y-10 grid-cols-2 md:grid-cols-3 lg:grid-cols-5"
+  "6" "grid gap-x-6 gap-y-10 grid-cols-2 md:grid-cols-4 lg:grid-cols-6"
+}}
+{{ $gridClass := index $grid (printf "%d" $columns) }}
+
+{{/* All profiles from data/authors */}}
+{{ $all := slice }}
+{{ $authors := partialCached "functions/get_authors_data" $page site.Language.Lang }}
+{{ range $slug, $_ := $authors }}
+  {{ $profile := partial "functions/get_author_profile" (dict "slug" $slug) }}
+  {{ $all = $all | append $profile }}
+{{ end }}
+
+<div class="container mx-auto px-6 py-12 max-w-6xl">
+  {{ with index $content "title" }}
+    <h1 class="text-3xl md:text-4xl font-bold text-center mb-3">{{ . | markdownify }}</h1>
+  {{ end }}
+  {{ with index $content "text" }}
+    <div class="prose dark:prose-invert max-w-3xl mx-auto text-center mb-10">{{ . | markdownify }}</div>
+  {{ end }}
+
+  {{ range $groupItem := (index $content "user_groups") }}
+    {{ $groupName := printf "%v" $groupItem }}
+    {{ if reflect.IsMap $groupItem }}{{ $groupName = printf "%v" (index $groupItem "name") }}{{ end }}
+    {{ $members := slice }}
+    {{ range $p := $all }}
+      {{ $groups := $p.user_groups }}
+      {{ if eq (printf "%T" $groups) "string" }}{{ $groups = slice $groups }}{{ end }}
+      {{ if and $groups (in $groups $groupName) }}{{ $members = $members | append $p }}{{ end }}
+    {{ end }}
+    {{ if gt (len $members) 0 }}
+      {{ $members = sort $members $sort_by (cond $sort_asc "asc" "desc") }}
+      <section class="mt-14 first:mt-4">
+        <h2 class="text-2xl font-semibold text-center mb-8">{{ $groupName }}</h2>
+        <div class="{{ $gridClass }}">
+          {{ range $p := $members }}
+            {{ $link := printf "/authors/%s/" $p.slug }}
+            <div class="flex flex-col items-center text-center">
+              <a href="{{ $link }}" class="block rounded-full overflow-hidden bg-gray-100 dark:bg-gray-800 shrink-0"
+                 style="width:{{ $avatar_size }}px;height:{{ $avatar_size }}px" aria-label="{{ $p.title }}">
+                {{ if $p.avatar }}
+                  {{ $img := $p.avatar.Fill (printf "%dx%d Center q90" (mul 2 $avatar_size) (mul 2 $avatar_size)) }}
+                  <img src="{{ $img.RelPermalink }}" alt="{{ $p.title }}" width="{{ $avatar_size }}" height="{{ $avatar_size }}" loading="lazy" class="w-full h-full object-cover">
+                {{ else }}
+                  <div class="w-full h-full flex items-center justify-center text-3xl font-semibold text-gray-500">{{ substr $p.title 0 1 }}</div>
+                {{ end }}
+              </a>
+              <h3 class="mt-3 text-lg font-semibold leading-tight"><a href="{{ $link }}" class="hover:text-primary-600 dark:hover:text-primary-400">{{ $p.title }}</a></h3>
+              {{ if and $show_role $p.role }}
+                <div class="mt-1 text-sm text-gray-600 dark:text-gray-400">{{ $p.role | markdownify }}</div>
+              {{ end }}
+              {{ if and $show_interests $p.interests (gt $max_interests 0) }}
+                <div class="mt-2 text-xs text-gray-500 dark:text-gray-400">{{ delimit (first $max_interests $p.interests) ", " }}</div>
+              {{ end }}
+              {{ if and $show_social $p.links }}
+                <div class="mt-2 text-sm">{{ partial "social_links" (dict "Params" (dict "profiles" $p.links)) }}</div>
+              {{ end }}
+            </div>
+          {{ end }}
+        </div>
+      </section>
+    {{ end }}
+  {{ end }}
+</div>

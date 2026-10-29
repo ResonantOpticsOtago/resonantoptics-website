@@ -1,0 +1,10 @@
+{{/*
+  Custom view "inline" (this site): a short in-text reference to a publication,
+  "Journal (Year)" linked to the publication page - like the previous site's
+  `view="1"`. Use in Markdown with the cite shortcode and view="inline".
+*/}}
+{{ $item := .item }}
+{{ $year := $item.Date.Format "2006" }}
+{{ $pub := partial "functions/resolve_publication.html" $item }}
+{{ $label := $pub.display_short | default $pub.display | default $item.Title }}
+<a href="{{ $item.RelPermalink }}" class="underline decoration-dotted" title="{{ $item.Title }}">{{ $label | markdownify | plainify }} ({{ $year }})</a>

@@ -28,3 +28,6 @@ package-lock.json.bak
 
 # Python virtual environment for the scripts
 .venv/
+
+# Build statistics written by Hugo for Tailwind (regenerated every build)
+hugo_stats.json

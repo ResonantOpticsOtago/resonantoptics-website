@@ -1,0 +1,153 @@
+{{/*
+  Custom block "publication-list" (this site, not part of HugoBlox Kit):
+  the complete publication list with a search box, filter buttons per
+  publication type and a sort control - like the previous site's publication
+  page. Each entry is rendered with the Kit's own "citation" view, so the
+  look of an entry is the theme's.
+
+  content:
+    title, text        optional heading and intro (Markdown)
+    folders            content folders to include, default [publication]
+    featured_first     false (default) | true   list featured papers before the rest
+  design:
+    view               citation (default) | card | date-title-summary
+    show_search        true (default) | false
+    show_filters       true (default) | false   type buttons
+    show_sort          true (default) | false
+*/}}
+{{ $page := .wcPage }}
+{{ $block := .wcBlock }}
+{{ $content := $block.content | default dict }}
+{{ $design := $block.design | default dict }}
+{{ $view := (index $design "view") | default "citation" }}
+{{ $show_search := partial "functions/coerce_bool" (dict "value" (index $design "show_search") "default" true) }}
+{{ $show_filters := partial "functions/coerce_bool" (dict "value" (index $design "show_filters") "default" true) }}
+{{ $show_sort := partial "functions/coerce_bool" (dict "value" (index $design "show_sort") "default" true) }}
+{{ $folders := (index $content "folders") | default (slice "publication") }}
+{{ if eq (printf "%T" $folders) "string" }}{{ $folders = slice $folders }}{{ end }}
+
+{{/* Human-readable labels for CSL publication types */}}
+{{ $labels := dict
+  "article-journal" "Journal articles"
+  "paper-conference" "Conference papers"
+  "chapter" "Book chapters"
+  "book" "Books"
+  "thesis" "Theses"
+  "manuscript" "Preprints"
+  "report" "Reports"
+  "patent" "Patents"
+  "article" "Articles"
+  "speech" "Talks"
+}}
+
+{{/* Collect pages */}}
+{{ $items := slice }}
+{{ range $folder := $folders }}
+  {{ $items = $items | append (where site.RegularPages "Section" $folder) }}
+{{ end }}
+{{ $items = $items.ByDate.Reverse }}
+
+{{/* Types present, with counts */}}
+{{ $types := dict }}
+{{ range $items }}
+  {{ $t := "other" }}
+  {{ with .Params.publication_types }}{{ if reflect.IsSlice . }}{{ $t = index . 0 }}{{ else }}{{ $t = . }}{{ end }}{{ end }}
+  {{ $types = merge $types (dict $t (add (index $types $t | default 0) 1)) }}
+{{ end }}
+
+{{ $uid := printf "publist-%s" (substr (md5 (printf "%v" $folders)) 0 6) }}
+
+<div class="container mx-auto px-6 py-10 max-w-4xl" id="{{ $uid }}">
+  {{ with index $content "title" }}<h1 class="text-3xl md:text-4xl font-bold mb-3">{{ . | markdownify }}</h1>{{ end }}
+  {{ with index $content "text" }}<div class="prose dark:prose-invert max-w-none mb-6">{{ . | markdownify }}</div>{{ end }}
+
+  <div class="flex flex-col gap-4 mb-8">
+    {{ if $show_search }}
+    <input type="search" class="publist-search w-full rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 px-4 py-2"
+           placeholder="{{ i18n "search_placeholder" | default "Search publications…" }}" aria-label="Search publications">
+    {{ end }}
+    <div class="flex flex-wrap items-center gap-2">
+      {{ if $show_filters }}
+        <button type="button" data-type="*" class="publist-filter active rounded-full border border-primary-500 px-3 py-1 text-sm">All <span class="opacity-60">({{ len $items }})</span></button>
+        {{ range $t, $n := $types }}
+          <button type="button" data-type="{{ $t }}" class="publist-filter rounded-full border border-gray-300 dark:border-gray-700 px-3 py-1 text-sm">{{ index $labels $t | default (humanize $t) }} <span class="opacity-60">({{ $n }})</span></button>
+        {{ end }}
+      {{ end }}
+      {{ if $show_sort }}
+        <label class="ml-auto text-sm flex items-center gap-2">Sort
+          <select class="publist-sort rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 px-2 py-1 text-sm">
+            <option value="newest">newest first</option>
+            <option value="oldest">oldest first</option>
+            <option value="title">title A–Z</option>
+          </select>
+        </label>
+      {{ end }}
+    </div>
+    <div class="publist-count text-sm text-gray-500" aria-live="polite"></div>
+  </div>
+
+  <div class="publist-items flex flex-col space-y-3">
+    {{ range $index, $item := $items }}
+      {{ $t := "other" }}
+      {{ with $item.Params.publication_types }}{{ if reflect.IsSlice . }}{{ $t = index . 0 }}{{ else }}{{ $t = . }}{{ end }}{{ end }}
+      {{ $authors := "" }}
+      {{ range $item.Params.authors }}{{ $authors = printf "%s %s" $authors . }}{{ end }}
+      {{ $pub := printf "%v" ($item.Params.publication | default "") }}
+      {{ $search := lower (printf "%s %s %s %s %s" $item.Title $authors $pub ($item.Params.abstract | default "") (delimit ($item.Params.tags | default slice) " ")) }}
+      <div class="publist-item" data-type="{{ $t }}" data-year="{{ $item.Date.Format "2006" }}" data-date="{{ $item.Date.Format "2006-01-02" }}" data-title="{{ lower $item.Title }}" data-search="{{ $search }}">
+        {{ partial "functions/render_view" (dict "page" $page "item" $item "view" $view "index" $index) }}
+      </div>
+    {{ end }}
+  </div>
+  <div class="publist-empty hidden text-gray-500 py-8 text-center">No publications match.</div>
+</div>
+
+<script>
+(function () {
+  var root = document.getElementById({{ $uid }});
+  if (!root) return;
+  var list = root.querySelector('.publist-items');
+  var items = Array.prototype.slice.call(list.children);
+  var search = root.querySelector('.publist-search');
+  var sort = root.querySelector('.publist-sort');
+  var count = root.querySelector('.publist-count');
+  var empty = root.querySelector('.publist-empty');
+  var type = '*';
+  function apply() {
+    var q = search ? search.value.trim().toLowerCase() : '';
+    var shown = 0;
+    items.forEach(function (el) {
+      var ok = (type === '*' || el.dataset.type === type) && (!q || el.dataset.search.indexOf(q) !== -1);
+      el.style.display = ok ? '' : 'none';
+      if (ok) shown++;
+    });
+    if (count) count.textContent = shown + ' of ' + items.length + (type !== '*' || q ? ' shown' : '');
+    if (empty) empty.classList.toggle('hidden', shown > 0);
+  }
+  function resort() {
+    var mode = sort ? sort.value : 'newest';
+    items.sort(function (a, b) {
+      if (mode === 'title') return a.dataset.title < b.dataset.title ? -1 : a.dataset.title > b.dataset.title ? 1 : 0;
+      var c = a.dataset.date < b.dataset.date ? -1 : a.dataset.date > b.dataset.date ? 1 : 0;
+      return mode === 'oldest' ? c : -c;
+    });
+    items.forEach(function (el) { list.appendChild(el); });
+  }
+  if (search) search.addEventListener('input', apply);
+  if (sort) sort.addEventListener('change', resort);
+  root.querySelectorAll('.publist-filter').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      type = btn.dataset.type;
+      root.querySelectorAll('.publist-filter').forEach(function (b) {
+        var active = b === btn;
+        b.classList.toggle('active', active);
+        b.classList.toggle('border-primary-500', active);
+        b.classList.toggle('border-gray-300', !active);
+        b.classList.toggle('dark:border-gray-700', !active);
+      });
+      apply();
+    });
+  });
+  apply();
+})();
+</script>
