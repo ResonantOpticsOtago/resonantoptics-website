@@ -9,8 +9,11 @@ authors:
 date: '2018-03-01'
 publication_types:
 - article-journal
-publication: '*APL Photonics*'
-doi: 10.1063/1.5011201
+publication:
+  name: APL Photonics
+hugoblox:
+  ids:
+    doi: 10.1063/1.5011201
 abstract: We study a calibration scheme for terahertz wave nonlinear-optical detectors based on spontaneous parametric down-conversion. Contrary to the usual low wavelength pump in the green, we report here on the observation of spontaneous parametric down-conversion originating from an in-growth poled lithium niobate crystal pumped with a continuous wave 50 mW, 795 nm diode laser system, phase-matched to a terahertz frequency idler wave. Such a system is more compact and allows for longer poling periods as well as lower losses in the crystal. Filtering the pump radiation by a rubidium-87 vapor cell allowed the frequency-angular spectra to be obtained down to ∼0.5 THz or ∼1 nm shift from the pump radiation line. The presence of an amplified spontaneous emission “pedestal” in the diode laser radiation spectrum significantly hampers the observation of spontaneous parametric down-conversion spectra, in contrast to conventional narrowband gas lasers. Benefits of switching to longer pump wavelengths are pointed out, such as collinear optical-terahertz phase-matching in bulk crystals.
 links:
 - name: URL

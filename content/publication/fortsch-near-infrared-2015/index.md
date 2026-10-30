@@ -16,8 +16,11 @@ authors:
 date: '2015-06-01'
 publication_types:
 - article-journal
-publication: '*Journal of Optics*'
-doi: 10.1088/2040-8978/17/6/065501
+publication:
+  name: Journal of Optics
+hugoblox:
+  ids:
+    doi: 10.1088/2040-8978/17/6/065501
 abstract: We demonstrate a method to perform spectroscopy of near-infrared single photons without the need of dispersive elements. This method is based on a photon energy resolving transition edge sensor and is applied for the characterization of widely wavelength tunable narrow-band single photons emitted from a crystalline whispering gallery mode resonator. We measure the emission wavelength of the generated signal and idler photons with an uncertainty of up to 2 nm.
 links:
 - name: URL

@@ -31,3 +31,6 @@ package-lock.json.bak
 
 # Build statistics written by Hugo for Tailwind (regenerated every build)
 hugo_stats.json
+
+# Python bytecode
+__pycache__/

@@ -1,0 +1,7 @@
+{{ $columns := printf "%v" (.config.columns | default 2) }}
+{{ $grid := dict
+  "1" "grid grid-cols-1 gap-8 max-w-[65ch] mx-auto"
+  "2" "grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto"
+  "3" "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto"
+}}
+<div class="container mx-auto px-4 my-5 {{ index $grid $columns | default (index $grid "2") }}">

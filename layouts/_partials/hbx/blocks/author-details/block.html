@@ -1,0 +1,69 @@
+{{/*
+  Custom block "author-details" (this site): the two simple columns of the
+  previous profile page - "Interests" as a bullet list and "Education" as a
+  plain list with a graduation-cap icon - read from data/authors/<id>.yaml.
+
+  content:
+    username              profile identifier (required)
+    headings:
+      interests           default "Interests"
+      education           default "Education"
+    show_year             true (default) | false   year after the institution
+  design:
+    columns               2 (default; interests left, education right) | 1
+*/}}
+{{ $block := .wcBlock }}
+{{ $content := $block.content | default dict }}
+{{ $design := $block.design | default dict }}
+{{ $username := index $content "username" }}
+{{ $headings := (index $content "headings") | default dict }}
+{{ $h_int := (index $headings "interests") | default "Interests" }}
+{{ $h_edu := (index $headings "education") | default "Education" }}
+{{ $show_year := partial "functions/coerce_bool" (dict "value" (index $content "show_year") "default" true) }}
+{{ $columns := partial "functions/coerce_int" (dict "value" (index $design "columns") "default" 2 "min" 1 "max" 2) }}
+
+{{ with $username }}
+  {{ $profile := partial "functions/get_author_profile" (dict "slug" .) }}
+  {{ $interests := $profile.interests | default slice }}
+  {{ if eq (printf "%T" $interests) "string" }}{{ $interests = slice $interests }}{{ end }}
+  {{ $education := $profile.education | default slice }}
+  {{ if or (gt (len $interests) 0) (gt (len $education) 0) }}
+  <div class="container mx-auto px-6 pb-10 max-w-3xl">
+    <div class="{{ if eq $columns 2 }}grid grid-cols-1 md:grid-cols-2 gap-10{{ else }}flex flex-col gap-10{{ end }}">
+      {{ if gt (len $interests) 0 }}
+      <div>
+        <h3 class="text-xl font-semibold mb-3">{{ $h_int }}</h3>
+        <ul class="list-disc pl-5 space-y-1 text-gray-700 dark:text-gray-300">
+          {{ range $interests }}<li>{{ . | markdownify }}</li>{{ end }}
+        </ul>
+      </div>
+      {{ end }}
+      {{ if gt (len $education) 0 }}
+      <div>
+        <h3 class="text-xl font-semibold mb-3">{{ $h_edu }}</h3>
+        <ul class="space-y-3">
+          {{ range $education }}
+            {{ $degree := "" }}{{ $inst := "" }}{{ $year := "" }}
+            {{ if reflect.IsMap . }}
+              {{ $degree = printf "%v" ((index . "degree") | default (index . "course") | default (index . "area") | default "") }}
+              {{ $inst = printf "%v" ((index . "institution") | default "") }}
+              {{ with index . "end" }}{{ $year = substr (printf "%v" .) 0 4 }}{{ end }}
+              {{ with index . "year" }}{{ $year = printf "%v" . }}{{ end }}
+            {{ else }}
+              {{ $degree = printf "%v" . }}
+            {{ end }}
+            <li class="flex items-start gap-3">
+              <span class="mt-1 text-primary-600 dark:text-primary-400 shrink-0">{{ partial "functions/get_icon" (dict "name" "hero/academic-cap" "attributes" "class=\"w-5 h-5\"") }}</span>
+              <span>
+                <span class="font-medium">{{ $degree }}</span>
+                {{ if $inst }}<br><span class="text-sm text-gray-600 dark:text-gray-400">{{ $inst }}{{ if and $show_year $year }}, {{ $year }}{{ end }}</span>{{ end }}
+              </span>
+            </li>
+          {{ end }}
+        </ul>
+      </div>
+      {{ end }}
+    </div>
+  </div>
+  {{ end }}
+{{ end }}

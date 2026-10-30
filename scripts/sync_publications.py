@@ -50,6 +50,7 @@ except ImportError:  # pragma: no cover
 
 ROOT = Path(__file__).resolve().parent.parent
 PUB_DIR = ROOT / "content" / "publication"
+KIT_SITE = False  # set in main(): True when the site runs on HugoBlox Kit
 BIB_FILE = ROOT / "publications.bib"
 API = "https://api.zotero.org"
 GROUP_ID = "6718035"  # https://www.zotero.org/groups/6718035/
@@ -68,7 +69,7 @@ GENERATED_FILES = {"index.md", "cite.bib"}
 # Canonical key order in the written front matter.
 KEY_ORDER = [
     "title", "subtitle", "authors", "author_notes", "date", "publication_types",
-    "publication", "publication_short", "doi", "abstract", "summary", "tags",
+    "publication", "publication_short", "doi", "hugoblox", "abstract", "summary", "tags",
     "links", "url_pdf", "url_code", "url_dataset", "url_poster", "url_project",
     "url_slides", "url_source", "url_video", "slides", "featured", "image",
     "projects", "draft",
@@ -322,6 +323,43 @@ def identity(fm: dict) -> tuple[str | None, str | None]:
     return doi, title
 
 
+def site_uses_kit() -> bool:
+    """True when the site runs on HugoBlox Kit (params.yaml has `hugoblox: schema: "2.0"`)."""
+    f = ROOT / "config" / "_default" / "params.yaml"
+    try:
+        cfg = yaml.safe_load(f.read_text(encoding="utf-8")) or {}
+    except Exception:  # noqa: BLE001
+        return False
+    return str(((cfg.get("hugoblox") or {}).get("schema")) or "").startswith("2")
+
+
+def to_kit_shape(fm: dict) -> dict:
+    """Convert the converter's legacy publication fields to the Kit's structured
+    shape (silences the Kit's per-page deprecation warnings):
+      publication: "*Name*"            -> publication: {name: "Name"}
+      publication_short: "*NAME*"      -> publication: {name, short_name: "NAME"}
+      doi: "10.x/y"                    -> hugoblox: {ids: {doi: "10.x/y"}}
+    Idempotent: already-structured values pass through."""
+    fm = dict(fm)
+    raw = fm.get("publication")
+    if isinstance(raw, str):
+        name = raw.strip().strip("*").strip()
+        pub: dict = {"name": name} if name else {}
+        short = fm.pop("publication_short", None)
+        if isinstance(short, str) and short.strip():
+            pub["short_name"] = short.strip().strip("*").strip()
+        fm["publication"] = pub
+    elif raw is None:
+        fm.pop("publication", None)
+    doi = fm.pop("doi", None)
+    if doi:
+        hb = fm.get("hugoblox") if isinstance(fm.get("hugoblox"), dict) else {}
+        ids = hb.get("ids") if isinstance(hb.get("ids"), dict) else {}
+        ids = {**ids, "doi": str(doi).strip()}
+        fm["hugoblox"] = {**hb, "ids": ids}
+    return fm
+
+
 def merge(generated: dict, old: dict | None) -> dict:
     fm = {k: v for k, v in generated.items() if k not in EPHEMERAL_KEYS}
     # `featured` used to be expressed as an extra entry in publication_types.
@@ -339,6 +377,8 @@ def merge(generated: dict, old: dict | None) -> dict:
             fm["featured"] = True
     if fm.get("featured") is not True:
         fm.pop("featured", None)
+    if KIT_SITE:
+        fm = to_kit_shape(fm)
     return fm
 
 
@@ -394,6 +434,9 @@ def main() -> int:
 
     if not PUB_DIR.is_dir():
         sys.exit(f"{PUB_DIR} not found; run from the repository")
+    global KIT_SITE
+    KIT_SITE = site_uses_kit()
+    print("publication front matter shape:", "HugoBlox Kit (structured)" if KIT_SITE else "legacy (Bootstrap theme)")
 
     raw = args.bib.read_text(encoding="utf-8") if args.bib else fetch_bibtex(
         args.group, args.collection, os.environ.get("ZOTERO_API_KEY") or None

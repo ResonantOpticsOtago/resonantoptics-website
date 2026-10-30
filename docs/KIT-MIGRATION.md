@@ -59,6 +59,14 @@ nothing of the theme is copied or shadowed. Added here (all in `layouts/`):
   entries are rendered with the Kit's own citation view.
 - `_partials/views/inline.html` — view for the `cite` shortcode: a short
   "Journal (Year)" link, as the previous site had.
+- `_partials/views/card-grid.html` (+ `--start`/`--end`) — the Kit's card in a
+  grid of `columns` (1–3); the Kit's own `card` view is always one wide column.
+- `_partials/hbx/blocks/author-details/block.html` — "Interests" and
+  "Education" as simple lists on profile pages (the Kit's
+  `resume-biography-3` shows them in a larger timeline style).
+- `assets/css/custom.css` — the Kit loads this file after its own CSS: a
+  darker green in the light theme, and the author box under publications
+  limited to three lines of biography. Both documented in the file.
 
 They use five Kit helper partials (`functions/get_authors_data`,
 `functions/get_author_profile`, `functions/resolve_publication`,
@@ -89,9 +97,13 @@ Where a presentation has alternatives, the `.md` files carry them as comments
    uses `PhotoMontage.png`; the THz image was upscaled ×3 as a placeholder —
    please provide a real one (≥ 1200 px). Cards elsewhere tolerate small
    images; ~35 news posts have small `featured` images and rendered fine.
-4. **Deprecation warnings** for every publication (`doi` → `hugoblox.ids.doi`,
-   flat `publication` → structured). The Kit still reads the old fields. Phase
-   2: the sync writes the new shape, warnings disappear.
+4. **Publication field shape**: the Kit wants `publication: {name, short_name}`
+   and `hugoblox: {ids: {doi}}` instead of the converter's flat fields. The
+   sync script now writes that shape automatically when it detects a Kit site
+   (`hugoblox: schema: "2.0"` in `params.yaml`), and the existing files were
+   converted once. On the Bootstrap branches it keeps the old shape. The
+   Kit's 143 per-page warnings are gone; one remaining warning
+   (`Image.Exif deprecated`) is inside the Kit.
 5. **Documentation gaps in the Kit**: e.g. the `logos` block README says
    `logos:`, the current component wants `items:`. Expect more of this; the
    Kit is 0.x.

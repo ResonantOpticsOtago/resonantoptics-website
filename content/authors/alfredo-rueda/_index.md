@@ -12,18 +12,29 @@ aliases:
 # delete `type: landing` and the whole `sections` list.
 type: landing
 sections:
-  - block: resume-biography-3
+  # Photo, name, role, affiliation, biography and links (Kit block).
+  - block: resume-biography
     content:
       username: alfredo-rueda
-      headings:
-        about: About
-        interests: Interests
-        education: Education
     design:
       name:
         size: compact           # compact | default
-      # avatar:
-      #   shape: circle         # circle | square (follows site setting by default)
+  # Interests and education as simple lists (site block; see
+  # layouts/_partials/hbx/blocks/author-details/). Alternative: the Kit's
+  # `resume-biography-3` block shows both in a larger timeline style - replace
+  # the two blocks above/below with:
+  # - block: resume-biography-3
+  #   content:
+  #     username: alfredo-rueda
+  - block: author-details
+    content:
+      username: alfredo-rueda
+      headings:
+        interests: Interests
+        education: Education
+      show_year: true
+    design:
+      columns: 2                # 2 (side by side) | 1
   - block: content-collection
     content:
       title: Publications
@@ -43,7 +54,7 @@ sections:
           - post
         author: alfredo-rueda
     design:
-      view: card                # card (with pictures) | date-title-summary
+      view: card-grid           # card-grid (pictures, `columns` wide) | card (one wide column) | date-title-summary
       columns: 2
       show_read_time: false
 ---

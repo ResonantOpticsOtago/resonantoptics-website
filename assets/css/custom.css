@@ -1,0 +1,26 @@
+/* Site CSS loaded after the theme's own stylesheet (HugoBlox Kit looks for
+   assets/css/custom.css). Keep it small; everything here is additive. */
+
+/* 1. Accent colour: one step darker green in the LIGHT theme only.
+      The Kit sets the palette on :root; this overrides the shades used for
+      links and buttons while the page is not in dark mode. To try other
+      strengths, swap the values (these are Tailwind's green-600…900 in oklch):
+        green-500 oklch(0.723 0.219 149.579)   green-600 oklch(0.627 0.194 149.214)
+        green-700 oklch(0.527 0.154 150.069)   green-800 oklch(0.448 0.119 151.328)
+        green-900 oklch(0.393 0.095 152.535) */
+html:not(.dark) {
+  --color-primary-500: oklch(0.627 0.194 149.214); /* was green-500, now green-600 */
+  --color-primary-600: oklch(0.527 0.154 150.069); /* was green-600, now green-700 */
+  --color-primary-700: oklch(0.448 0.119 151.328); /* was green-700, now green-800 */
+  --color-primary-800: oklch(0.393 0.095 152.535); /* was green-800, now green-900 */
+}
+
+/* 2. Author box under a publication or post: show at most 3 lines of the
+      biography (the full text is on the profile page). Change 3 to taste,
+      or delete the rule to show the whole biography. */
+.flex.pt-12.pb-4 .place-self-center > div.text-sm:not(.font-bold) {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

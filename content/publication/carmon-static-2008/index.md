@@ -10,7 +10,8 @@ authors:
 date: '2008-01-01'
 publication_types:
 - article-journal
-publication: '*Physical Review Letters*'
+publication:
+  name: Physical Review Letters
 abstract: We study level crossing in the optical whispering-gallery (WG) modes by using toroidal microcavities. Experimentally, we image the stationary envelope patterns of the composite optical modes that arise when WG modes of different wavelengths coincide in frequency. Numerically, we calculate crossings of levels that correspond with the observed degenerate modes, where our method takes into account the not perfectly transverse nature of their field polarizations. In addition, we analyze anticrossing with a large avoidance gap between modes of the same azimuthal number.
 links:
 - name: URL

@@ -10,7 +10,7 @@
     sort_by                name_family (default) | weight | graduation_year
     sort_ascending         true (default) | false
   design:
-    columns                3 | 4 | 5 (default) | 6   people per row on wide screens
+    columns                2 | 3 | 4 | 5 (default) | 6   people per row on wide screens (rows are centred)
     avatar_size            photo diameter in px, default 112
     show_role              true (default) | false
     show_interests         false (default) | true  (first `max_interests`, default 3)
@@ -30,14 +30,16 @@
 {{ $sort_by := (index $content "sort_by") | default "name_family" }}
 {{ $sort_asc := partial "functions/coerce_bool" (dict "value" (index $content "sort_ascending") "default" true) }}
 
-{{ $grid := dict
-  "2" "grid gap-x-6 gap-y-10 grid-cols-2"
-  "3" "grid gap-x-6 gap-y-10 grid-cols-2 md:grid-cols-3"
-  "4" "grid gap-x-6 gap-y-10 grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
-  "5" "grid gap-x-6 gap-y-10 grid-cols-2 md:grid-cols-3 lg:grid-cols-5"
-  "6" "grid gap-x-6 gap-y-10 grid-cols-2 md:grid-cols-4 lg:grid-cols-6"
+{{/* Rows are flex-wrapped and centred, so a group with fewer people than
+     columns is centred rather than flush left. */}}
+{{ $basis := dict
+  "2" "w-1/2"
+  "3" "w-1/2 md:w-1/3"
+  "4" "w-1/2 md:w-1/3 lg:w-1/4"
+  "5" "w-1/2 md:w-1/3 lg:w-1/5"
+  "6" "w-1/2 md:w-1/4 lg:w-1/6"
 }}
-{{ $gridClass := index $grid (printf "%d" $columns) }}
+{{ $itemClass := index $basis (printf "%d" $columns) }}
 
 {{/* All profiles from data/authors */}}
 {{ $all := slice }}
@@ -68,10 +70,10 @@
       {{ $members = sort $members $sort_by (cond $sort_asc "asc" "desc") }}
       <section class="mt-14 first:mt-4">
         <h2 class="text-2xl font-semibold text-center mb-8">{{ $groupName }}</h2>
-        <div class="{{ $gridClass }}">
+        <div class="flex flex-wrap justify-center gap-y-10">
           {{ range $p := $members }}
             {{ $link := printf "/authors/%s/" $p.slug }}
-            <div class="flex flex-col items-center text-center">
+            <div class="{{ $itemClass }} px-3 flex flex-col items-center text-center">
               <a href="{{ $link }}" class="block rounded-full overflow-hidden bg-gray-100 dark:bg-gray-800 shrink-0"
                  style="width:{{ $avatar_size }}px;height:{{ $avatar_size }}px" aria-label="{{ $p.title }}">
                 {{ if $p.avatar }}

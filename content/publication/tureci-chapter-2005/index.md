@@ -8,7 +8,8 @@ authors:
 date: '2005-01-01'
 publication_types:
 - chapter
-publication: '*Progress in Optics*'
+publication:
+  name: Progress in Optics
 links:
 - name: URL
   url: http://www.sciencedirect.com/science/article/pii/S007966380547002X

@@ -8,5 +8,6 @@ authors:
 date: '2005-01-01'
 publication_types:
 - chapter
-publication: '*Optical Microcavities*'
+publication:
+  name: Optical Microcavities
 ---

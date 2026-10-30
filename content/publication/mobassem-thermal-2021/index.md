@@ -10,8 +10,11 @@ authors:
 date: '2021-07-01'
 publication_types:
 - article-journal
-publication: '*Quantum Science and Technology*'
-doi: 10.1088/2058-9565/ac0f36
+publication:
+  name: Quantum Science and Technology
+hugoblox:
+  ids:
+    doi: 10.1088/2058-9565/ac0f36
 abstract: The quantum bits (qubits) on which superconducting quantum computers are based have energy scales corresponding to photons with GHz frequencies. The energy of photons in the gigahertz domain is too low to allow transmission through the noisy room-temperature environment, where the signal would be lost in thermal noise. Optical photons, on the other hand, have much higher energies, and signals can be detected using highly efficient single-photon detectors. Transduction from microwave to optical frequencies is therefore a potential enabling technology for quantum devices. However, in such a device the optical pump can be a source of thermal noise and thus degrade the fidelity; the similarity of input microwave state to the output optical state. In order to investigate the magnitude of this effect we model the sub-Kelvin thermal behavior of an electro-optic transducer based on a lithium niobate whispering gallery mode resonator. We find that there is an optimum power level for a continuous pump, whilst pulsed operation of the pump increases the fidelity of the conversion.
 links:
 - name: URL

@@ -52,4 +52,22 @@ sections:
       columns: 3
       lightbox: true
       caption_position: overlay
+  # Group photos (Group2023.jpg and Group2025.jpg are in assets/media/).
+  # Alternatives: `layout: masonry | grid | carousel`, `columns: 1 | 2 | 3`,
+  # `lightbox: true | false`, `caption_position: overlay | below`.
+  - block: gallery
+    content:
+      title: Group photos
+      items:
+        - src: Group2025.jpg
+          title: The group in 2025
+          caption: Resonant Optics group, 2025
+        - src: Group2023.jpg
+          title: The group in 2023
+          caption: Resonant Optics group, 2023
+    design:
+      layout: carousel
+      columns: 2
+      lightbox: true
+      caption_position: below
 ---
