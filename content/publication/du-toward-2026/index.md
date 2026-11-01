@@ -1,0 +1,20 @@
+---
+title: Toward Low-Power Laser Refrigeration - Cooling a Resonant WGM Crystalline Cavity
+authors:
+- Jinjin Du
+- Rong Zhang
+- Zhenghan Yuan
+- Cyril Laplane
+- luke-s.-trainor
+- harald-g.-l.-schwefel
+- Jason Twamley
+date: '2026-10-01'
+publication_types:
+- article-journal
+publication: '*Laser & Photonics Reviews*'
+doi: 10.1002/lpor.72085
+abstract: We demonstrate laser refrigeration of a millimeter-scale crystalline whispering-gallery-mode (WGM) resonator fabricated from 10% p̌hantomrm Ybtextasciicircum3+:YLF, operating at atmospheric pressure. Under resonant pumping at 1031 nm, the resonator exhibits a measurable temperature reduction of sim 0.5 K below room temperature with an input power of only 100 mW, corresponding to a temperature drop rate of about 4.8 K/W. Although the present undercoupled configuration yields an effective cavity enhancement factor close to unity, these results represent the experimental demonstration of optical refrigeration in a crystalline WGM resonator. This work establishes crystalline WGMs as a viable platform for thermally stable rare-earth doped photonic devices, and with optimized coupling conditions, significantly deeper cooling and improved performance are expected for applications in precision photonics and quantum technologies.
+links:
+- name: URL
+  url: https://onlinelibrary.wiley.com/doi/abs/10.1002/lpor.72085
+---
